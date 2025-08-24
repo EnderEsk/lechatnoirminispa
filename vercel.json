@@ -1,0 +1,25 @@
+{
+  "rewrites": [
+    {
+      "source": "/career-objective",
+      "destination": "/career-objective/index.html"
+    },
+    {
+      "source": "/career-skills",
+      "destination": "/career-skills/index.html"
+    },
+    {
+      "source": "/personal-management",
+      "destination": "/personal-management/index.html"
+    },
+    {
+      "source": "/work-history",
+      "destination": "/work-history/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "cleanUrls": true
+}

@@ -15,27 +15,44 @@ class NavigationLoader {
         try {
             // Determine the correct path to components based on current page location
             const currentPath = window.location.pathname;
-            const isRoot = currentPath === '/' || currentPath.endsWith('index.html') || currentPath.endsWith('/');
-            const isSubdirectory = currentPath.includes('/') && !currentPath.endsWith('/') && !currentPath.endsWith('index.html');
+            const isRoot = currentPath === '/' || currentPath === '/index.html';
+            const isSubdirectory = currentPath.includes('/') && !isRoot;
             const basePath = isSubdirectory ? '../components/' : 'components/';
+            
+            console.log('Navigation path detection:', {
+                currentPath,
+                isRoot,
+                isSubdirectory,
+                basePath
+            });
             
 
             
             // Load HTML component
             const htmlResponse = await fetch(basePath + 'navbar.html');
+            if (!htmlResponse.ok) {
+                throw new Error(`Failed to load navbar.html: ${htmlResponse.status} ${htmlResponse.statusText}`);
+            }
             this.navbarHTML = await htmlResponse.text();
 
             // Load CSS component
             const cssResponse = await fetch(basePath + 'navbar.css');
+            if (!cssResponse.ok) {
+                throw new Error(`Failed to load navbar.css: ${cssResponse.status} ${cssResponse.statusText}`);
+            }
             this.navbarCSS = await cssResponse.text();
 
             // Load JS component
             const jsResponse = await fetch(basePath + 'navbar.js');
+            if (!jsResponse.ok) {
+                throw new Error(`Failed to load navbar.js: ${jsResponse.status} ${jsResponse.statusText}`);
+            }
             this.navbarJS = await jsResponse.text();
 
             this.loaded = true;
+            console.log('Navigation components loaded successfully');
         } catch (error) {
-            // Error loading navigation components
+            console.error('Error loading navigation components:', error);
         }
     }
 
@@ -78,14 +95,23 @@ class NavigationLoader {
         await this.loadComponents();
         this.injectNavigation();
         
-        // Update paths based on current page location
-        this.updatePaths();
+        // Wait for DOM to be fully updated before setting active states
+        setTimeout(() => {
+            // Update paths based on current page location
+            this.updatePaths();
+        }, 200);
+        
+        // Also try to set active states after a longer delay as a fallback
+        setTimeout(() => {
+            console.log('Fallback: Setting active states after longer delay');
+            this.setActiveStates();
+        }, 1000);
     }
 
     updatePaths() {
         const currentPath = window.location.pathname;
-        const isRoot = currentPath === '/' || currentPath.endsWith('index.html') || currentPath.endsWith('/');
-        const isSubdirectory = currentPath.includes('/') && !currentPath.endsWith('/') && !currentPath.endsWith('index.html');
+        const isRoot = currentPath === '/' || currentPath === '/index.html';
+        const isSubdirectory = currentPath.includes('/') && !isRoot;
         
 
         
@@ -117,13 +143,13 @@ class NavigationLoader {
             if (href && !href.startsWith('#') && !href.startsWith('http')) {
                 if (isSubdirectory) {
                     // Add parent directory for subpages
-                    if (href.startsWith('career-objective/') || href.startsWith('personal-management/') || href.startsWith('work-history/')) {
-                        link.href = '../' + href;
-                    } else if (href === 'index.html') {
-                        link.href = '../index.html';
-                    } else {
-                        link.href = href;
-                    }
+                                    if (href.startsWith('career-objective/') || href.startsWith('personal-management/') || href.startsWith('work-history/') || href.startsWith('career-skills/')) {
+                    link.href = '../' + href;
+                } else if (href === 'index.html') {
+                    link.href = '../index.html';
+                } else {
+                    link.href = href;
+                }
                 } else {
                     // Keep relative paths as is for root page
                     link.href = href;
@@ -138,10 +164,26 @@ class NavigationLoader {
     setActiveStates() {
         const currentPath = window.location.pathname;
         
+        console.log('Setting active states for path:', currentPath);
+        
         // Remove all active classes first
         document.querySelectorAll('.nav-link, .mobile-nav-link, .submenu-bubble-item').forEach(link => {
             link.classList.remove('active');
         });
+        
+        // Remove active states from mobile navigation items
+        document.querySelectorAll('.mobile-nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+        console.log('Found mobile nav items:', mobileNavItems.length);
+        
+        // If no mobile nav items found, the navigation might not be loaded yet
+        if (mobileNavItems.length === 0) {
+            console.log('No mobile nav items found, navigation might not be loaded yet');
+            return;
+        }
 
         // Set active state based on current page - only highlight the exact current page
         if (currentPath.includes('personal-management/index.html')) {
@@ -149,21 +191,69 @@ class NavigationLoader {
             personalManagementLinks.forEach(link => {
                 link.classList.add('active');
             });
+            // Set mobile navigation active state for profile section
+            const profileItem = document.querySelector('[data-section="profile"]');
+            if (profileItem) {
+                profileItem.classList.add('active');
+                
+                // Also highlight the Personal Management link in the submenu
+                const personalManagementSubmenuLink = profileItem.querySelector('a[href*="personal-management/index.html"]');
+                if (personalManagementSubmenuLink) {
+                    personalManagementSubmenuLink.classList.add('active');
+                }
+            }
         } else if (currentPath.includes('career-objective/index.html')) {
             const careerObjectiveLinks = document.querySelectorAll('a[href*="career-objective/index.html"]');
             careerObjectiveLinks.forEach(link => {
                 link.classList.add('active');
             });
+            console.log('Found career objective links:', careerObjectiveLinks.length);
+            
+            // Set mobile navigation active state for profile section
+            const profileItem = document.querySelector('[data-section="profile"]');
+            console.log('Profile item found:', !!profileItem);
+            if (profileItem) {
+                profileItem.classList.add('active');
+                console.log('Added active class to profile item');
+                
+                // Also highlight the Career Objective link in the submenu
+                const careerObjectiveSubmenuLink = profileItem.querySelector('a[href*="career-objective/index.html"]');
+                console.log('Career Objective submenu link found:', !!careerObjectiveSubmenuLink);
+                if (careerObjectiveSubmenuLink) {
+                    careerObjectiveSubmenuLink.classList.add('active');
+                    console.log('Added active class to Career Objective submenu link');
+                } else {
+                    console.log('No Career Objective submenu link found in profile item');
+                    console.log('Profile item children:', profileItem.children);
+                    console.log('Profile item HTML:', profileItem.innerHTML);
+                }
+            } else {
+                console.log('Profile item not found, searching for data-section="profile"');
+                console.log('All mobile nav items:', document.querySelectorAll('.mobile-nav-item'));
+            }
         } else if (currentPath.includes('work-history/index.html')) {
             const workHistoryLinks = document.querySelectorAll('a[href*="work-history/index.html"]');
             workHistoryLinks.forEach(link => {
                 link.classList.add('active');
             });
-        } else if (currentPath === '/' || currentPath.endsWith('index.html')) {
-            // Home page - no specific links to highlight
+            // Set mobile navigation active state for experience section
+            const experienceItem = document.querySelector('[data-section="experience"]');
+            if (experienceItem) {
+                experienceItem.classList.add('active');
+                
+                // Also highlight the Work History link in the submenu
+                const workHistorySubmenuLink = experienceItem.querySelector('a[href*="work-history/index.html"]');
+                if (workHistorySubmenuLink) {
+                    workHistorySubmenuLink.classList.add('active');
+                }
+            }
+        } else if (currentPath === '/' || currentPath === '/index.html') {
+            // Home page - set mobile navigation active state for home section
+            const homeItem = document.querySelector('[data-section="home"]');
+            if (homeItem) homeItem.classList.add('active');
         }
         
-        // Remove active states from submenu items that don't match the current page
+        // Set active states for submenu bubble items
         const allSubmenuItems = document.querySelectorAll('.submenu-bubble-item');
         allSubmenuItems.forEach(item => {
             const href = item.getAttribute('href');
@@ -173,13 +263,13 @@ class NavigationLoader {
                                     (currentPath.includes('career-objective/index.html') && href.includes('career-objective/index.html')) ||
                                     (currentPath.includes('work-history/index.html') && href.includes('work-history/index.html'));
                 
-                if (!isCurrentPage) {
+                if (isCurrentPage) {
+                    item.classList.add('active');
+                } else {
                     item.classList.remove('active');
                 }
             }
         });
-        
-
     }
 }
 
@@ -208,3 +298,12 @@ if (document.readyState === 'loading') {
 
 // Export for manual use if needed
 window.NavigationLoader = NavigationLoader;
+
+// Also export a global function for debugging
+window.debugNavigation = () => {
+    console.log('Debugging navigation...');
+    console.log('Current path:', window.location.pathname);
+    console.log('Mobile nav items:', document.querySelectorAll('.mobile-nav-item'));
+    console.log('Profile section:', document.querySelector('[data-section="profile"]'));
+    console.log('Active classes:', document.querySelectorAll('.mobile-nav-item.active'));
+};

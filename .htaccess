@@ -1,0 +1,26 @@
+RewriteEngine On
+
+# Remove .html extension from URLs
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.html [NC,L]
+
+# Handle directory requests (e.g., /career-objective/ -> /career-objective/index.html)
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME}/index.html -f
+RewriteRule ^(.+)/$ $1/index.html [L]
+
+# Redirect /index.html to /
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Redirect /career-objective/index.html to /career-objective
+RewriteRule ^career-objective/index\.html$ /career-objective [R=301,L]
+
+# Redirect /career-skills/index.html to /career-skills
+RewriteRule ^career-skills/index\.html$ /career-skills [R=301,L]
+
+# Redirect /personal-management/index.html to /personal-management
+RewriteRule ^personal-management/index\.html$ /personal-management [R=301,L]
+
+# Redirect /work-history/index.html to /work-history
+RewriteRule ^work-history/index\.html$ /work-history [R=301,L]

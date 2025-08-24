@@ -296,6 +296,17 @@
     width: 0.5rem;
 }
 
+/* Active state for submenu bubble items */
+.submenu-bubble-item.active {
+    color: #A78BFA;
+    background-color: rgba(167, 139, 250, 0.2);
+    border-color: rgba(167, 139, 250, 0.3);
+}
+
+.submenu-bubble-item.active::before {
+    width: 0.5rem;
+}
+
 /* Home Indicator Bar */
 .home-indicator {
     position: absolute;
@@ -662,6 +673,18 @@
 
 .mobile-nav-link:hover::before {
     width: 0.5rem;
+}
+
+/* Active state for mobile nav links */
+.mobile-nav-link.active {
+    color: #A78BFA;
+    background-color: rgba(167, 139, 250, 0.2);
+    border-left: 3px solid #A78BFA;
+}
+
+.mobile-nav-link.active::before {
+    width: 0.5rem;
+    background: #A78BFA;
 }
 
 /* Close button for mobile menu */
