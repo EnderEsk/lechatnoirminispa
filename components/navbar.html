@@ -1,0 +1,143 @@
+<!-- Universal Navigation Bar Component -->
+<nav class="navbar" id="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <a href="index.html" class="logo-link">
+                <img src="logo-test.png" alt="Le Chat Noir Logo" class="logo-image">
+            </a>
+        </div>
+        
+        <!-- Desktop Navigation -->
+        <div class="links">
+            <div class="nav-group">
+                <span class="group-title">Profile</span>
+                <div class="nav-links-container">
+                    <a href="career-objective/index.html" class="nav-link">Career Objective</a>
+                    <a href="personal-management/index.html" class="nav-link">Personal Management</a>
+                </div>
+            </div>
+            
+            <div class="nav-group">
+                <span class="group-title">Experience</span>
+                <div class="nav-links-container">
+                    <a href="work-history/index.html" class="nav-link">Work History</a>
+                    <a href="#career-skills" class="nav-link">Career Skills</a>
+                </div>
+            </div>
+            
+            <div class="nav-group">
+                <span class="group-title">Recognition</span>
+                <div class="nav-links-container">
+                    <a href="#awards" class="nav-link">Awards & Achievements</a>
+                </div>
+            </div>
+            
+            <div class="nav-group">
+                <span class="group-title">Documents</span>
+                <div class="nav-links-container">
+                    <a href="#cover-letter" class="nav-link">Cover Letter</a>
+                    <a href="#resume" class="nav-link">Resume</a>
+                    <a href="#references" class="nav-link">References</a>
+                    <a href="#portfolio" class="nav-link">Portfolio</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" id="mobile-menu-overlay">
+    <button class="mobile-menu-close" id="mobile-menu-close">&times;</button>
+    <div class="mobile-menu-content">
+        <div class="mobile-nav-links">
+            <div class="mobile-nav-group">
+                <span class="mobile-group-title" data-group="profile">Profile</span>
+                <div class="mobile-nav-links-container" id="profile-links">
+                    <a href="career-objective/index.html" class="mobile-nav-link">Career Objective</a>
+                    <a href="personal-management/index.html" class="mobile-nav-link">Personal Management</a>
+                </div>
+            </div>
+            
+            <div class="mobile-nav-group">
+                <span class="mobile-group-title" data-group="experience">Experience</span>
+                <div class="mobile-nav-links-container" id="experience-links">
+                    <a href="work-history/index.html" class="mobile-nav-link">Work History</a>
+                    <a href="#career-skills" class="mobile-nav-link">Career Skills</a>
+                </div>
+            </div>
+            
+            <div class="mobile-nav-group">
+                <span class="mobile-group-title" data-group="recognition">Recognition</span>
+                <div class="mobile-nav-links-container" id="recognition-links">
+                    <a href="#awards" class="mobile-nav-link">Awards & Achievements</a>
+                </div>
+            </div>
+            
+            <div class="mobile-nav-group">
+                <span class="mobile-group-title" data-group="documents">Documents</span>
+                <div class="mobile-nav-links-container" id="documents-links">
+                    <a href="#cover-letter" class="mobile-nav-link">Cover Letter</a>
+                    <a href="#resume" class="mobile-nav-link">Resume</a>
+                    <a href="#references" class="mobile-nav-link">References</a>
+                    <a href="#portfolio" class="mobile-nav-link">Portfolio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Bottom Navigation Bar -->
+<div class="mobile-bottom-nav" id="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-container">
+        <div class="mobile-nav-item" data-section="profile">
+            <div class="mobile-nav-icon icon-profile"></div>
+            <span class="mobile-nav-text">Profile</span>
+            <div class="submenu-bubble" id="profile-submenu">
+                <a href="career-objective/index.html" class="submenu-bubble-item">Career Objective</a>
+                <a href="personal-management/index.html" class="submenu-bubble-item">Personal Management</a>
+            </div>
+        </div>
+        
+        <div class="mobile-nav-item" data-section="experience">
+            <div class="mobile-nav-icon icon-experience"></div>
+            <span class="mobile-nav-text">Experience</span>
+            <div class="submenu-bubble" id="experience-submenu">
+                <a href="work-history/index.html" class="submenu-bubble-item">Work History</a>
+                <a href="#career-skills" class="submenu-bubble-item">Career Skills</a>
+            </div>
+        </div>
+        
+        <div class="mobile-nav-item center-item" data-section="home">
+            <a href="index.html" class="center-logo-link">
+                <img src="logo-test.png" alt="Le Chat Noir Logo" class="center-logo-image">
+            </a>
+        </div>
+        
+        <div class="mobile-nav-item" data-section="recognition">
+            <div class="mobile-nav-icon icon-recognition"></div>
+            <span class="mobile-nav-text">Recognition</span>
+            <div class="submenu-bubble" id="recognition-submenu">
+                <a href="#awards" class="submenu-bubble-item">Awards & Achievements</a>
+            </div>
+        </div>
+        
+        <div class="mobile-nav-item" data-section="documents">
+            <div class="mobile-nav-icon icon-documents"></div>
+            <span class="mobile-nav-text">Documents</span>
+            <div class="submenu-bubble" id="documents-submenu">
+                <a href="#cover-letter" class="submenu-bubble-item">Cover Letter</a>
+                <a href="#resume" class="submenu-bubble-item">Resume</a>
+                <a href="#references" class="submenu-bubble-item">References</a>
+                <a href="#portfolio" class="submenu-bubble-item">Portfolio</a>
+            </div>
+        </div>
+    </div>
+    <div class="home-indicator"></div>
+</div>

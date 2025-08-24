@@ -1,0 +1,23 @@
+{
+  "name": "lechatnoirminispa",
+  "version": "1.0.0",
+  "description": "Le Chat Noir Mini Spa - Luxury Spa & Beauty Center Website",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server --port=3000 --open=/",
+    "dev": "live-server --port=3000 --open=/",
+    "build": "echo 'Static site - no build step required'"
+  },
+  "keywords": [
+    "spa",
+    "beauty",
+    "luxury",
+    "wellness",
+    "website"
+  ],
+  "author": "Le Chat Noir Mini Spa",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
