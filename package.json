@@ -4,7 +4,7 @@
   "description": "Le Chat Noir Mini Spa - Luxury Spa & Beauty Center Website",
   "main": "index.html",
   "scripts": {
-    "start": "http-server . -p 8000 -o -a localhost --cors -P http://localhost:8000?",
+    "start": "http-server . -p $PORT -o -a 0.0.0.0 --cors",
     "dev": "http-server . -p 8000 -o -a localhost --cors -P http://localhost:8000?",
     "build": "echo 'Static site - no build step required'"
   },
