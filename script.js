@@ -1,6 +1,114 @@
 
 // Personal Management Page JavaScript
 
+// Profile Bubble Popup functionality
+function initializeProfileBubble() {
+    const aboutMeBtn = document.getElementById('about-me-btn');
+    const profileBubble = document.getElementById('profile-bubble');
+    const bubbleArrow = profileBubble?.querySelector('.bubble-arrow');
+    
+    if (aboutMeBtn && profileBubble) {
+        // Toggle bubble on click
+        aboutMeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isVisible = profileBubble.classList.contains('show');
+            
+            if (!isVisible) {
+                positionBubble(aboutMeBtn, profileBubble, bubbleArrow);
+            }
+            
+            profileBubble.classList.toggle('show');
+        });
+        
+        // Close bubble when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!aboutMeBtn.contains(e.target) && !profileBubble.contains(e.target)) {
+                profileBubble.classList.remove('show');
+            }
+        });
+        
+        // Close bubble on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                profileBubble.classList.remove('show');
+            }
+        });
+        
+        // Reposition bubble on window resize
+        window.addEventListener('resize', () => {
+            if (profileBubble.classList.contains('show')) {
+                positionBubble(aboutMeBtn, profileBubble, bubbleArrow);
+            }
+        });
+    }
+}
+
+// Smart positioning function for the bubble popup
+function positionBubble(button, bubble, arrow) {
+    const buttonRect = button.getBoundingClientRect();
+    const bubbleRect = bubble.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Calculate available space in each direction
+    const spaceBelow = viewportHeight - buttonRect.bottom;
+    const spaceAbove = buttonRect.top;
+    const spaceRight = viewportWidth - buttonRect.left;
+    const spaceLeft = buttonRect.right;
+    
+    // Determine vertical position (prefer below, fallback to above)
+    let top, arrowTop, arrowBorder;
+    if (spaceBelow >= bubbleRect.height + 20) {
+        // Position below button
+        top = buttonRect.bottom + 10;
+        arrowTop = -8;
+        arrowBorder = 'border-bottom: 8px solid rgba(51, 58, 87, 0.95);';
+    } else if (spaceAbove >= bubbleRect.height + 20) {
+        // Position above button
+        top = buttonRect.top - bubbleRect.height - 10;
+        arrowTop = bubbleRect.height;
+        arrowBorder = 'border-top: 8px solid rgba(51, 58, 87, 0.95);';
+    } else {
+        // Center vertically if no space above or below
+        top = Math.max(10, (viewportHeight - bubbleRect.height) / 2);
+        arrowTop = -8;
+        arrowBorder = 'border-bottom: 8px solid rgba(51, 58, 87, 0.95);';
+    }
+    
+    // Determine horizontal position (prefer center, adjust if off-screen)
+    let left, arrowLeft;
+    const preferredLeft = buttonRect.left + (buttonRect.width / 2) - (bubbleRect.width / 2);
+    
+    if (preferredLeft >= 10 && preferredLeft + bubbleRect.width <= viewportWidth - 10) {
+        // Center on button
+        left = preferredLeft;
+        arrowLeft = (bubbleRect.width / 2) - 8;
+    } else if (spaceRight >= bubbleRect.width) {
+        // Position to the right
+        left = buttonRect.right + 10;
+        arrowLeft = -8;
+    } else if (spaceLeft >= bubbleRect.width) {
+        // Position to the left
+        left = buttonRect.left - bubbleRect.width - 10;
+        arrowLeft = bubbleRect.width - 8;
+    } else {
+        // Center horizontally if no space on sides
+        left = Math.max(10, (viewportWidth - bubbleRect.width) / 2);
+        arrowLeft = (bubbleRect.width / 2) - 8;
+    }
+    
+    // Apply positions
+    bubble.style.top = `${top}px`;
+    bubble.style.left = `${left}px`;
+    
+    // Position and style the arrow
+    if (arrow) {
+        arrow.style.top = `${arrowTop}px`;
+        arrow.style.left = `${arrowLeft}px`;
+        arrow.style.cssText += arrowBorder;
+    }
+}
+
 // Navigation functionality
 function initializeNavigation() {
     console.log('Initializing navigation...');
@@ -395,6 +503,7 @@ const observer = new IntersectionObserver((entries) => {
 // Observe content sections for animation
 document.addEventListener('DOMContentLoaded', () => {
     initializeNavigation();
+    initializeProfileBubble();
     const contentSections = document.querySelectorAll('.content-section');
     
     contentSections.forEach(section => {

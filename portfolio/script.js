@@ -179,11 +179,10 @@ function initializePortfolio() {
             img.style.transform = 'scale(1)';
         });
         
-        // Add click event for image enlargement (optional)
-        img.addEventListener('click', () => {
-            // You can add a lightbox or modal here if desired
-            console.log('Portfolio image clicked:', img.src);
-        });
+            // Add click event for image enlargement
+    img.addEventListener('click', () => {
+        openImageModal(img.src, img.alt);
+    });
     });
     
     // Add intersection observer for fade-in animations
@@ -213,10 +212,68 @@ function initializePortfolio() {
     console.log('Portfolio initialized successfully');
 }
 
+// Image Modal/Lightbox functionality
+function openImageModal(imageSrc, imageAlt) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalCaption = document.getElementById('modalCaption');
+    
+    if (modal && modalImage && modalCaption) {
+        modalImage.src = imageSrc;
+        modalImage.alt = imageAlt;
+        
+        // Set caption based on image type
+        if (imageAlt.toLowerCase().includes('before')) {
+            modalCaption.textContent = 'Before Treatment';
+        } else if (imageAlt.toLowerCase().includes('after')) {
+            modalCaption.textContent = 'After Treatment';
+        } else {
+            modalCaption.textContent = imageAlt;
+        }
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+}
+
+// Initialize modal event listeners
+function initializeModal() {
+    const modal = document.getElementById('imageModal');
+    const modalClose = document.getElementById('modalClose');
+    
+    if (modal && modalClose) {
+        // Close modal when clicking close button
+        modalClose.addEventListener('click', closeImageModal);
+        
+        // Close modal when clicking outside the image
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeImageModal();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeImageModal();
+            }
+        });
+    }
+}
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     initializeNavigation();
     initializePortfolio();
+    initializeModal();
 });
 
 // Initialize if DOM is already loaded
@@ -224,8 +281,10 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         initializeNavigation();
         initializePortfolio();
+        initializeModal();
     });
 } else {
     initializeNavigation();
     initializePortfolio();
+    initializeModal();
 }
