@@ -128,9 +128,9 @@ class NavigationLoader {
         const logoLinks = document.querySelectorAll('.logo-link, .center-logo-link');
         logoLinks.forEach(link => {
             if (isSubdirectory) {
-                link.href = '../index.html';
+                link.href = '../';
             } else {
-                link.href = 'index.html';
+                link.href = '/';
             }
         });
 
@@ -151,16 +151,15 @@ class NavigationLoader {
             
             if (href && !href.startsWith('#') && !href.startsWith('http')) {
                 if (isSubdirectory) {
-                    // Add parent directory for subpages
-                                    if (href.startsWith('career-objective/') || href.startsWith('personal-management/') || href.startsWith('work-history/') || href.startsWith('career-skills/')) {
-                    link.href = '../' + href;
-                } else if (href === 'index.html') {
-                    link.href = '../index.html';
+                    // For subpages, we need to adjust paths for relative navigation
+                    if (href === '/') {
+                        link.href = '../';
+                    } else if (href.startsWith('/')) {
+                        // Convert absolute paths to relative paths for subdirectories
+                        link.href = '..' + href;
+                    }
                 } else {
-                    link.href = href;
-                }
-                } else {
-                    // Keep relative paths as is for root page
+                    // Keep absolute paths as is for root page
                     link.href = href;
                 }
             }
@@ -178,17 +177,17 @@ class NavigationLoader {
             <nav class="navbar">
                 <div class="nav-container">
                     <div class="logo">
-                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../index.html' : 'index.html'}" class="logo-link">
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../' : '/'}" class="logo-link">
                             <img src="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../logo-test.png' : 'logo-test.png'}" alt="Le Chat Noir Logo" class="logo-image">
                         </a>
                     </div>
                     <div class="nav-links">
-                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../index.html' : 'index.html'}" class="nav-link">Home</a>
-                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../career-objective/index.html' : 'career-objective/index.html'}" class="nav-link">Career Objective</a>
-                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../personal-management/index.html' : 'personal-management/index.html'}" class="nav-link">Personal Management</a>
-                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../work-history/index.html' : 'work-history/index.html'}" class="nav-link">Work History</a>
-                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../career-skills/index.html' : 'career-skills/index.html'}" class="nav-link">Career Skills</a>
-                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../awards-achievements/index.html' : 'awards-achievements/index.html'}" class="nav-link">Awards</a>
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../' : '/'}" class="nav-link">Home</a>
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../career-objective' : '/career-objective'}" class="nav-link">Career Objective</a>
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../personal-management' : '/personal-management'}" class="nav-link">Personal Management</a>
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../work-history' : '/work-history'}" class="nav-link">Work History</a>
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../career-skills' : '/career-skills'}" class="nav-link">Career Skills</a>
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../awards-achievements' : '/awards-achievements'}" class="nav-link">Awards</a>
                     </div>
                 </div>
             </nav>

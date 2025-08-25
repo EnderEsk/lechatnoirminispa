@@ -101,6 +101,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
+// URL Cleaning Function - Prevents index.html from being appended to URLs
+function cleanURLs() {
+    // Get current URL
+    const currentURL = window.location.href;
+    
+    // Check if we're on a page with index.html in the URL
+    if (currentURL.includes('/index.html')) {
+        // Remove index.html from the URL
+        const cleanURL = currentURL.replace('/index.html', '');
+        
+        // Update browser history without reloading the page
+        window.history.replaceState({}, document.title, cleanURL);
+        
+        console.log('Cleaned URL from:', currentURL, 'to:', cleanURL);
+    }
+}
+
+// Clean URLs when page loads
+document.addEventListener('DOMContentLoaded', cleanURLs);
+
+// Also clean URLs when navigating (for single-page app behavior)
+window.addEventListener('popstate', cleanURLs);
+
+// Intercept navigation clicks to prevent index.html from being added
+document.addEventListener('click', function(event) {
+    // Check if the clicked element is a navigation link
+    if (event.target.tagName === 'A' && event.target.href) {
+        const href = event.target.href;
+        
+        // If the link would result in index.html being added, prevent it
+        if (href.includes('/index.html')) {
+            event.preventDefault();
+            
+            // Navigate to the clean URL instead
+            const cleanHref = href.replace('/index.html', '');
+            window.location.href = cleanHref;
+        }
+    }
+});
+
 
 
 

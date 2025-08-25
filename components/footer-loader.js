@@ -106,13 +106,8 @@ function processFooterHTML(html, isInSubdirectory) {
         // Fix logo path
         processedHtml = processedHtml.replace('src="logo-test.png"', 'src="../logo-test.png"');
         
-        // Fix navigation links
-        processedHtml = processedHtml.replace('href="index.html"', 'href="../index.html"');
-        processedHtml = processedHtml.replace('href="career-objective/index.html"', 'href="../career-objective/index.html"');
-        processedHtml = processedHtml.replace('href="personal-management/index.html"', 'href="../personal-management/index.html"');
-        processedHtml = processedHtml.replace('href="work-history/index.html"', 'href="../work-history/index.html"');
-        processedHtml = processedHtml.replace('href="career-skills/index.html"', 'href="../career-skills/index.html"');
-        processedHtml = processedHtml.replace('href="awards-achievements/index.html"', 'href="../awards-achievements/index.html"');
+        // No need to fix navigation links since we're using clean URLs now
+        // The footer already uses absolute paths like "/career-skills"
     }
     
     return processedHtml;
@@ -142,12 +137,12 @@ function createInlineFooter() {
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul class="footer-links">
-                        <li><a href="${pathPrefix}index.html">Home</a></li>
-                        <li><a href="${pathPrefix}career-objective/index.html">Career Objective</a></li>
-                        <li><a href="${pathPrefix}personal-management/index.html">Personal Management</a></li>
-                        <li><a href="${pathPrefix}work-history/index.html">Work History</a></li>
-                        <li><a href="${pathPrefix}career-skills/index.html">Career Skills</a></li>
-                        <li><a href="${pathPrefix}awards-achievements/index.html">Awards & Achievements</a></li>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/career-objective">Career Objective</a></li>
+                        <li><a href="/personal-management">Personal Management</a></li>
+                        <li><a href="/work-history">Work History</a></li>
+                        <li><a href="/career-skills">Career Skills</a></li>
+                        <li><a href="/awards-achievements">Awards & Achievements</a></li>
                     </ul>
                 </div>
                 

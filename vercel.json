@@ -1,12 +1,46 @@
 {
-  "rewrites": [
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
     {
-      "source": "/career-objective",
-      "destination": "/career-objective/index.html"
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
     },
+    {
+      "source": "/career-skills/index.html",
+      "destination": "/career-skills",
+      "permanent": true
+    },
+    {
+      "source": "/career-objective/index.html",
+      "destination": "/career-objective",
+      "permanent": true
+    },
+    {
+      "source": "/personal-management/index.html",
+      "destination": "/personal-management",
+      "permanent": true
+    },
+    {
+      "source": "/work-history/index.html",
+      "destination": "/work-history",
+      "permanent": true
+    },
+    {
+      "source": "/awards-achievements/index.html",
+      "destination": "/awards-achievements",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
     {
       "source": "/career-skills",
       "destination": "/career-skills/index.html"
+    },
+    {
+      "source": "/career-objective",
+      "destination": "/career-objective/index.html"
     },
     {
       "source": "/personal-management",
@@ -19,11 +53,6 @@
     {
       "source": "/awards-achievements",
       "destination": "/awards-achievements/index.html"
-    },
-    {
-      "source": "/",
-      "destination": "/index.html"
     }
-  ],
-  "cleanUrls": true
+  ]
 }

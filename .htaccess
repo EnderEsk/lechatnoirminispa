@@ -1,26 +1,63 @@
+# Enable URL rewriting
 RewriteEngine On
 
-# Remove .html extension from URLs
+# Remove trailing slashes
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+# Handle clean URLs for subdirectories
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^\.]+)$ $1.html [NC,L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^/]+)/?$ $1/index.html [L]
 
-# Handle directory requests (e.g., /career-objective/ -> /career-objective/index.html)
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteCond %{REQUEST_FILENAME}/index.html -f
-RewriteRule ^(.+)/$ $1/index.html [L]
-
-# Redirect /index.html to /
+# Redirect /index.html to / (clean homepage URL)
+RewriteCond %{THE_REQUEST} /index\.html [NC]
 RewriteRule ^index\.html$ / [R=301,L]
 
-# Redirect /career-objective/index.html to /career-objective
-RewriteRule ^career-objective/index\.html$ /career-objective [R=301,L]
-
 # Redirect /career-skills/index.html to /career-skills
+RewriteCond %{THE_REQUEST} /career-skills/index\.html [NC]
 RewriteRule ^career-skills/index\.html$ /career-skills [R=301,L]
 
+# Redirect /career-objective/index.html to /career-objective
+RewriteCond %{THE_REQUEST} /career-objective/index\.html [NC]
+RewriteRule ^career-objective/index\.html$ /career-objective [R=301,L]
+
 # Redirect /personal-management/index.html to /personal-management
+RewriteCond %{THE_REQUEST} /personal-management/index\.html [NC]
 RewriteRule ^personal-management/index\.html$ /personal-management [R=301,L]
 
 # Redirect /work-history/index.html to /work-history
+RewriteCond %{THE_REQUEST} /work-history/index\.html [NC]
 RewriteRule ^work-history/index\.html$ /work-history [R=301,L]
+
+# Redirect /awards-achievements/index.html to /awards-achievements
+RewriteCond %{THE_REQUEST} /awards-achievements/index\.html [NC]
+RewriteRule ^awards-achievements/index\.html$ /awards-achievements [R=301,L]
+
+# Set default index file
+DirectoryIndex index.html
+
+# Enable compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# Set cache headers
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+</IfModule>
