@@ -18,56 +18,28 @@ function loadFooter() {
 }
 
 function loadFooterHTML() {
-    // Determine if we're in a subdirectory for path adjustments
-    const isInSubdirectory = isInSubdirectoryPage();
-    const componentsPath = isInSubdirectory ? '../components/' : 'components/';
+    // Universal path detection that works across all platforms and protocols
+    const basePath = getBasePath();
     
-    console.log('Loading footer from path:', componentsPath);
+    console.log('Loading footer from path:', basePath);
     console.log('Current location:', window.location.href);
     console.log('Protocol:', window.location.protocol);
     console.log('Footer placeholder element:', document.getElementById('footer-placeholder'));
     
-    // Check if we're running on localhost or file protocol
-    const isLocalhost = window.location.hostname === 'localhost' || 
-                       window.location.hostname === '127.0.0.1';
-    
-    console.log('Is localhost:', isLocalhost);
-    
-    // For localhost, use inline footer to avoid routing issues
-    if (isLocalhost) {
-        console.log('Using inline footer for localhost');
-        createInlineFooter();
-        return;
-    }
-    
-    // Create a timeout promise for localhost scenarios
-    const timeoutPromise = new Promise((_, reject) => {
-        if (isLocalhost) {
-            setTimeout(() => reject(new Error('Fetch timeout on localhost')), 2000); // 2 second timeout
-        }
-    });
-    
     // Try to fetch the footer HTML file
-    const fetchPromise = fetch(`${componentsPath}footer.html`)
+    fetch(`${basePath}footer.html`)
         .then(response => {
             console.log('Footer fetch response:', response.status, response.statusText);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.text();
-        });
-    
-    // Race between fetch and timeout
-    Promise.race([fetchPromise, timeoutPromise])
+        })
         .then(html => {
             console.log('Footer HTML loaded, length:', html.length);
-            console.log('Footer HTML preview:', html.substring(0, 200));
-            console.log('Footer HTML contains footer tag:', html.includes('<footer'));
-            console.log('Footer HTML contains hero section:', html.includes('hero'));
-            console.log('Footer HTML contains main content:', html.includes('main'));
             
             // Process the HTML to fix paths for subdirectories
-            const processedHtml = processFooterHTML(html, isInSubdirectory);
+            const processedHtml = processFooterHTML(html, basePath);
             
             // Find or create footer placeholder
             let footerPlaceholder = document.getElementById('footer-placeholder');
@@ -77,17 +49,15 @@ function loadFooterHTML() {
                 document.body.insertAdjacentHTML('beforeend', processedHtml);
             } else {
                 console.log('Footer placeholder found, replacing content');
-                console.log('Footer placeholder before replacement:', footerPlaceholder.innerHTML);
                 // Replace placeholder with footer
                 footerPlaceholder.innerHTML = processedHtml;
-                console.log('Footer placeholder after replacement:', footerPlaceholder.innerHTML);
             }
             
             // Load footer CSS
-            loadFooterCSS();
+            loadFooterCSS(basePath);
             
             // Load footer JavaScript
-            loadFooterJS();
+            loadFooterJS(basePath);
             
             console.log('Footer component loaded successfully');
         })
@@ -99,24 +69,60 @@ function loadFooterHTML() {
         });
 }
 
-function processFooterHTML(html, isInSubdirectory) {
+function getBasePath() {
+    // Simple, universal path detection that works across all platforms
+    const currentPath = window.location.pathname;
+    const pathSegments = currentPath.split('/').filter(segment => segment !== '');
+    
+    console.log('Current path:', currentPath);
+    console.log('Path segments:', pathSegments);
+    
+    // If we're in a subdirectory (not root), go up one level to find components
+    if (pathSegments.length > 1) {
+        console.log('In subdirectory, paths will be adjusted');
+        return '../components/';
+    } else {
+        console.log('In root directory, no path adjustment needed');
+        return 'components/';
+    }
+}
+
+function processFooterHTML(html, basePath) {
     let processedHtml = html;
     
-    if (isInSubdirectory) {
-        // Fix logo path
+    // Fix logo path if we're in a subdirectory
+    if (basePath === '../components/') {
         processedHtml = processedHtml.replace('src="logo-test.png"', 'src="../logo-test.png"');
-        
-        // No need to fix navigation links since we're using clean URLs now
-        // The footer already uses absolute paths like "/career-skills"
     }
     
     return processedHtml;
 }
 
+function processFooterCSS(css, basePath) {
+    let processedCSS = css;
+    
+    // Fix any relative paths in CSS if we're in a subdirectory
+    if (basePath === '../components/') {
+        // Fix any image paths that might be relative
+        processedCSS = processedCSS.replace(/url\(['"]?([^'")\s]+)['"]?\)/g, (match, url) => {
+            // Skip data URLs and absolute URLs
+            if (url.startsWith('data:') || url.startsWith('http') || url.startsWith('/')) {
+                return match;
+            }
+            // Make relative paths go up one level
+            return `url("../${url}")`;
+        });
+    }
+    
+    return processedCSS;
+}
+
 function createInlineFooter() {
-    // Determine if we're in a subdirectory for path adjustments
-    const isInSubdirectory = isInSubdirectoryPage();
-    const pathPrefix = isInSubdirectory ? '../' : '';
+    // Universal path detection
+    const basePath = getBasePath();
+    const isSubdirectory = basePath === '../components/';
+    const pathPrefix = isSubdirectory ? '../' : '/';
+    const logoPath = isSubdirectory ? '../logo-test.png' : 'logo-test.png';
     
     const footerHtml = `
         <!-- Footer -->
@@ -124,7 +130,7 @@ function createInlineFooter() {
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <img src="${pathPrefix}logo-test.png" alt="Le Chat Noir Logo" class="footer-logo-image">
+                        <img src="${logoPath}" alt="Le Chat Noir Logo" class="footer-logo-image">
                         <h3>Le Chat Noir</h3>
                         <p class="footer-tagline">Mini Spa</p>
                     </div>
@@ -137,12 +143,12 @@ function createInlineFooter() {
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul class="footer-links">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/career-objective">Career Objective</a></li>
-                        <li><a href="/personal-management">Personal Management</a></li>
-                        <li><a href="/work-history">Work History</a></li>
-                        <li><a href="/career-skills">Career Skills</a></li>
-                        <li><a href="/awards-achievements">Awards & Achievements</a></li>
+                        <li><a href="${pathPrefix}">Home</a></li>
+                        <li><a href="${pathPrefix}career-objective">Career Objective</a></li>
+                        <li><a href="${pathPrefix}personal-management">Personal Management</a></li>
+                        <li><a href="${pathPrefix}work-history">Work History</a></li>
+                        <li><a href="${pathPrefix}career-skills">Career Skills</a></li>
+                        <li><a href="${pathPrefix}awards-achievements">Awards & Achievements</a></li>
                     </ul>
                 </div>
                 
@@ -223,60 +229,28 @@ function createInlineFooter() {
     }
     
     // Load footer CSS
-    loadFooterCSS();
+    loadFooterCSS(basePath);
     
     // Load footer JavaScript
-    loadFooterJS();
+    loadFooterJS(basePath);
     
     console.log('Inline footer created successfully');
 }
 
-function isInSubdirectoryPage() {
-    // Get current page path to determine if we're in a subdirectory
-    const currentPath = window.location.pathname;
-    const pathSegments = currentPath.split('/').filter(segment => segment !== '');
-    
-    console.log('Current path:', currentPath);
-    console.log('Path segments:', pathSegments);
-    
-    // If we're in a subdirectory (e.g., /career-objective/), we need to go up one level
-    if (pathSegments.length > 1) {
-        console.log('In subdirectory, paths will be adjusted');
-        return true;
-    } else {
-        console.log('In root directory, no path adjustment needed');
-        return false;
-    }
-}
-
-function loadFooterCSS() {
+function loadFooterCSS(basePath) {
     // Check if footer CSS is already loaded
     if (document.querySelector('link[href*="footer.css"]')) {
         console.log('Footer CSS already loaded');
         return;
     }
     
-    // Determine the correct path to components directory
-    const isInSubdirectory = isInSubdirectoryPage();
-    const componentsPath = isInSubdirectory ? '../components/' : 'components/';
-    
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = `${componentsPath}footer.css`;
+    link.href = `${basePath}footer.css`;
     link.type = 'text/css';
     
-    // Add error handling for CSS loading
     link.onerror = () => {
         console.error('Failed to load footer CSS:', link.href);
-        // Try alternative path for localhost
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            console.log('Trying alternative CSS path for localhost');
-            const altLink = document.createElement('link');
-            altLink.rel = 'stylesheet';
-            altLink.href = `./components/footer.css`;
-            altLink.type = 'text/css';
-            document.head.appendChild(altLink);
-        }
     };
     
     link.onload = () => {
@@ -288,32 +262,19 @@ function loadFooterCSS() {
     console.log('Footer CSS loading from:', link.href);
 }
 
-function loadFooterJS() {
+function loadFooterJS(basePath) {
     // Check if footer JS is already loaded
     if (document.querySelector('script[src*="footer.js"]')) {
         console.log('Footer JS already loaded');
         return;
     }
     
-    // Determine the correct path to components directory
-    const isInSubdirectory = isInSubdirectoryPage();
-    const componentsPath = isInSubdirectory ? '../components/' : 'components/';
-    
     const script = document.createElement('script');
-    script.src = `${componentsPath}footer.js`;
+    script.src = `${basePath}footer.js`;
     script.type = 'text/javascript';
     
-    // Add error handling for JS loading
     script.onerror = () => {
         console.error('Failed to load footer JS:', script.src);
-        // Try alternative path for localhost
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            console.log('Trying alternative JS path for localhost');
-            const altScript = document.createElement('script');
-            altScript.src = `./components/footer.js`;
-            altScript.type = 'text/javascript';
-            document.body.appendChild(altScript);
-        }
     };
     
     script.onload = () => {

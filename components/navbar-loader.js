@@ -13,53 +13,22 @@ class NavigationLoader {
         if (this.loaded) return;
 
         try {
-            // Determine the correct path to components based on current page location
-            const currentPath = window.location.pathname;
-            const isRoot = currentPath === '/' || currentPath === '/index.html';
-            const isSubdirectory = currentPath.includes('/') && !isRoot;
-            
-            // More sophisticated path detection for subdirectories
-            let basePath;
-            if (isRoot) {
-                basePath = 'components/';
-            } else if (currentPath.includes('/career-skills/')) {
-                basePath = '../components/';
-            } else if (currentPath.includes('/career-objective/')) {
-                basePath = '../components/';
-            } else if (currentPath.includes('/personal-management/')) {
-                basePath = '../components/';
-            } else if (currentPath.includes('/work-history/')) {
-                basePath = '../components/';
-            } else if (currentPath.includes('/awards-achievements/')) {
-                basePath = '../components/';
-            } else {
-                basePath = '../components/';
-            }
+            // Universal path detection that works across all platforms and protocols
+            const basePath = this.getBasePath();
             
             console.log('Navigation path detection:', {
-                currentPath,
-                isRoot,
-                isSubdirectory,
-                basePath
+                currentPath: window.location.pathname,
+                protocol: window.location.protocol,
+                hostname: window.location.hostname,
+                basePath: basePath
             });
             
-            // Check if we're running on localhost or file protocol
-            const isLocalhost = window.location.hostname === 'localhost' || 
-                               window.location.hostname === '127.0.0.1' ||
-                               window.location.protocol === 'file:';
-            
-            // For now, let's always try to load the actual components first
-            // Only fall back to inline navigation if the actual components fail to load
-            console.log('Attempting to load actual navbar components...');
-            
             // Load HTML component
-            console.log('Attempting to load navbar.html from:', basePath + 'navbar.html');
             const htmlResponse = await fetch(basePath + 'navbar.html');
             if (!htmlResponse.ok) {
                 throw new Error(`Failed to load navbar.html: ${htmlResponse.status} ${htmlResponse.statusText}`);
             }
             this.navbarHTML = await htmlResponse.text();
-            console.log('Successfully loaded navbar.html');
 
             // Load CSS component
             const cssResponse = await fetch(basePath + 'navbar.css');
@@ -80,9 +49,58 @@ class NavigationLoader {
         } catch (error) {
             console.error('Error loading navigation components:', error);
             console.log('Falling back to inline navigation...');
-            // If loading actual components fails, fall back to inline navigation
             this.createInlineNavigation();
         }
+    }
+
+    getBasePath() {
+        // Simple, universal path detection that works across all platforms
+        const currentPath = window.location.pathname;
+        const pathSegments = currentPath.split('/').filter(segment => segment !== '');
+        
+        // If we're in a subdirectory (not root), go up one level to find components
+        if (pathSegments.length > 1) {
+            return '../components/';
+        } else {
+            return 'components/';
+        }
+    }
+
+    processNavbarHTML(html, basePath) {
+        let processedHtml = html;
+        const isSubdirectory = basePath === '../components/';
+        
+        if (isSubdirectory) {
+            // Fix logo image path
+            processedHtml = processedHtml.replace('src="logo-test.png"', 'src="../logo-test.png"');
+            
+            // Fix navigation links to use relative paths
+            processedHtml = processedHtml.replace(/href="\//g, 'href="../');
+            
+            // Fix home link specifically
+            processedHtml = processedHtml.replace('href="../"', 'href="../');
+        }
+        
+        return processedHtml;
+    }
+
+    processNavbarCSS(css, basePath) {
+        let processedCSS = css;
+        const isSubdirectory = basePath === '../components/';
+        
+        if (isSubdirectory) {
+            // Fix any image paths that might be relative
+            processedCSS = processedCSS.replace(/url\(['"]?([^'")\s]+)['"]?\)/g, (match, url) => {
+                // Skip data URLs and absolute URLs
+                if (url.startsWith('data:') || url.startsWith('http') || url.startsWith('/')) {
+                    return match;
+                }
+                // Make relative paths go up one level
+                return `url("../${url}")`;
+            });
+        }
+        
+        return processedCSS;
     }
 
     injectNavigation() {
@@ -90,22 +108,27 @@ class NavigationLoader {
             return;
         }
 
+        // Process the HTML to fix paths for subdirectories
+        const processedHTML = this.processNavbarHTML(this.navbarHTML, this.getBasePath());
+        
+        // Process the CSS to fix any relative paths for subdirectories
+        const processedCSS = this.processNavbarCSS(this.navbarCSS, this.getBasePath());
+
         // Inject CSS
         if (!document.querySelector('#navbar-styles')) {
             const styleElement = document.createElement('style');
             styleElement.id = 'navbar-styles';
-            styleElement.textContent = this.navbarCSS;
+            styleElement.textContent = processedCSS;
             document.head.appendChild(styleElement);
-
         }
 
         // Inject HTML - replace the placeholder div
         const placeholder = document.querySelector('#navbar-placeholder');
         if (placeholder) {
-            placeholder.outerHTML = this.navbarHTML;
+            placeholder.outerHTML = processedHTML;
         } else {
             // Fallback: insert at the beginning of body if no placeholder exists
-            document.body.insertAdjacentHTML('afterbegin', this.navbarHTML);
+            document.body.insertAdjacentHTML('afterbegin', processedHTML);
         }
 
         // Wait a bit for DOM to update, then inject JavaScript
@@ -115,7 +138,6 @@ class NavigationLoader {
                 scriptElement.id = 'navbar-script';
                 scriptElement.textContent = this.navbarJS;
                 document.body.appendChild(scriptElement);
-
             }
         }, 100);
     }
@@ -126,7 +148,6 @@ class NavigationLoader {
         
         // Wait for DOM to be fully updated before setting active states
         setTimeout(() => {
-            // Update paths based on current page location
             this.updatePaths();
         }, 200);
         
@@ -138,30 +159,19 @@ class NavigationLoader {
     }
 
     updatePaths() {
-        const currentPath = window.location.pathname;
-        const isRoot = currentPath === '/' || currentPath === '/index.html';
-        const isSubdirectory = currentPath.includes('/') && !isRoot;
-        
-
+        const basePath = this.getBasePath();
+        const isSubdirectory = basePath === '../components/';
         
         // Update logo links
         const logoLinks = document.querySelectorAll('.logo-link, .center-logo-link');
         logoLinks.forEach(link => {
-            if (isSubdirectory) {
-                link.href = '../';
-            } else {
-                link.href = '/';
-            }
+            link.href = isSubdirectory ? '../' : '/';
         });
 
         // Update logo image sources
         const logoImages = document.querySelectorAll('.logo-image, .center-logo-image');
         logoImages.forEach(img => {
-            if (isSubdirectory) {
-                img.src = '../logo-test.png';
-            } else {
-                img.src = 'logo-test.png';
-            }
+            img.src = isSubdirectory ? '../logo-test.png' : 'logo-test.png';
         });
 
         // Update navigation links based on current page
@@ -190,15 +200,20 @@ class NavigationLoader {
     }
 
     createInlineNavigation() {
-        console.log('Creating inline navigation for localhost');
+        console.log('Creating inline navigation');
+        
+        const basePath = this.getBasePath();
+        const isSubdirectory = basePath === '../components/';
+        const pathPrefix = isSubdirectory ? '../' : '/';
+        const logoPath = isSubdirectory ? '../logo-test.png' : 'logo-test.png';
         
         // Create a full inline navigation that matches the original structure
         const navHTML = `
             <nav class="navbar" id="navbar">
                 <div class="nav-container">
                     <div class="logo">
-                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../' : '/'}" class="logo-link">
-                            <img src="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../logo-test.png' : 'logo-test.png'}" alt="Le Chat Noir Logo" class="logo-image">
+                        <a href="${pathPrefix}" class="logo-link">
+                            <img src="${logoPath}" alt="Le Chat Noir Logo" class="logo-image">
                         </a>
                     </div>
                     
@@ -207,23 +222,23 @@ class NavigationLoader {
                         <div class="nav-group">
                             <span class="group-title">Profile</span>
                             <div class="nav-links-container">
-                                <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../career-objective' : '/career-objective'}" class="nav-link">Career Objective</a>
-                                <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../personal-management' : '/personal-management'}" class="nav-link">Personal Management</a>
+                                <a href="${pathPrefix}career-objective" class="nav-link">Career Objective</a>
+                                <a href="${pathPrefix}personal-management" class="nav-link">Personal Management</a>
                             </div>
                         </div>
                         
                         <div class="nav-group">
                             <span class="group-title">Experience</span>
                             <div class="nav-links-container">
-                                <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../work-history' : '/work-history'}" class="nav-link">Work History</a>
-                                <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../career-skills' : '/career-skills'}" class="nav-link">Career Skills</a>
+                                <a href="${pathPrefix}work-history" class="nav-link">Work History</a>
+                                <a href="${pathPrefix}career-skills" class="nav-link">Career Skills</a>
                             </div>
                         </div>
                         
                         <div class="nav-group">
                             <span class="group-title">Recognition</span>
                             <div class="nav-links-container">
-                                <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../awards-achievements' : '/awards-achievements'}" class="nav-link">Awards & Achievements</a>
+                                <a href="${pathPrefix}awards-achievements" class="nav-link">Awards & Achievements</a>
                             </div>
                         </div>
                         
@@ -255,23 +270,23 @@ class NavigationLoader {
                         <div class="mobile-nav-group">
                             <span class="mobile-group-title" data-group="profile">Profile</span>
                             <div class="mobile-nav-links-container" id="profile-links">
-                                <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../career-objective' : '/career-objective'}" class="mobile-nav-link">Career Objective</a>
-                                <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../personal-management' : '/personal-management'}" class="mobile-nav-link">Personal Management</a>
+                                <a href="${pathPrefix}career-objective" class="mobile-nav-link">Career Objective</a>
+                                <a href="${pathPrefix}personal-management" class="mobile-nav-link">Personal Management</a>
                             </div>
                         </div>
                         
                         <div class="mobile-nav-group">
                             <span class="mobile-group-title" data-group="experience">Experience</span>
                             <div class="mobile-nav-links-container" id="experience-links">
-                                <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../work-history' : '/work-history'}" class="mobile-nav-link">Work History</a>
-                                <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../career-skills' : '/career-skills'}" class="mobile-nav-link">Career Skills</a>
+                                <a href="${pathPrefix}work-history" class="mobile-nav-link">Work History</a>
+                                <a href="${pathPrefix}career-skills" class="mobile-nav-link">Career Skills</a>
                             </div>
                         </div>
                         
                         <div class="mobile-nav-group">
                             <span class="mobile-group-title" data-group="recognition">Recognition</span>
                             <div class="mobile-nav-links-container" id="recognition-links">
-                                <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../awards-achievements' : '/awards-achievements'}" class="mobile-nav-link">Awards & Achievements</a>
+                                <a href="${pathPrefix}awards-achievements" class="mobile-nav-link">Awards & Achievements</a>
                             </div>
                         </div>
                         
@@ -295,8 +310,8 @@ class NavigationLoader {
                         <div class="mobile-nav-icon icon-profile"></div>
                         <span class="mobile-nav-text">Profile</span>
                         <div class="submenu-bubble" id="profile-submenu">
-                            <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../career-objective' : '/career-objective'}" class="submenu-bubble-item">Career Objective</a>
-                            <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../personal-management' : '/personal-management'}" class="submenu-bubble-item">Personal Management</a>
+                            <a href="${pathPrefix}career-objective" class="submenu-bubble-item">Career Objective</a>
+                            <a href="${pathPrefix}personal-management" class="submenu-bubble-item">Personal Management</a>
                         </div>
                     </div>
                     
@@ -304,14 +319,14 @@ class NavigationLoader {
                         <div class="mobile-nav-icon icon-experience"></div>
                         <span class="mobile-nav-text">Experience</span>
                         <div class="submenu-bubble" id="experience-submenu">
-                            <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../work-history' : '/work-history'}" class="submenu-bubble-item">Work History</a>
-                            <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../career-skills' : '/career-skills'}" class="submenu-bubble-item">Career Skills</a>
+                            <a href="${pathPrefix}work-history" class="submenu-bubble-item">Work History</a>
+                            <a href="${pathPrefix}career-skills" class="submenu-bubble-item">Career Skills</a>
                         </div>
                     </div>
                     
                     <div class="mobile-nav-item center-item" data-section="home">
-                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../' : '/'}" class="center-logo-link">
-                            <img src="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../logo-test.png' : 'logo-test.png'}" alt="Le Chat Noir Logo" class="center-logo-image">
+                        <a href="${pathPrefix}" class="center-logo-link">
+                            <img src="${logoPath}" alt="Le Chat Noir Logo" class="center-logo-image">
                         </a>
                     </div>
                     
@@ -319,7 +334,7 @@ class NavigationLoader {
                         <div class="mobile-nav-icon icon-recognition"></div>
                         <span class="mobile-nav-text">Recognition</span>
                         <div class="submenu-bubble" id="recognition-submenu">
-                            <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../awards-achievements' : '/awards-achievements'}" class="submenu-bubble-item">Awards & Achievements</a>
+                            <a href="${pathPrefix}awards-achievements" class="submenu-bubble-item">Awards & Achievements</a>
                         </div>
                     </div>
                     
