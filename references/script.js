@@ -1,6 +1,4 @@
-
-// Personal Management Page JavaScript
-
+// Main Content Functionality
 // Navigation functionality
 function initializeNavigation() {
     console.log('Initializing navigation...');
@@ -22,61 +20,12 @@ function initializeNavigation() {
         navLinks: navLinks.length,
         navGroups: navGroups.length,
         mobileBottomNav: !!mobileBottomNav,
-        mobileNavItems: mobileNavItems.length,
-        mobileMenuToggle: !!mobileMenuToggle,
-        mobileMenuOverlay: !!mobileMenuOverlay,
-        mobileMenuClose: !!mobileMenuClose,
-        mobileGroupTitles: mobileGroupTitles.length
+        mobileNavItems: mobileNavItems.length
     });
-    
-    // Debug: Log all found elements
-    console.log('Navbar element:', navbar);
-    console.log('Nav links:', navLinks);
-    console.log('Nav groups:', navGroups);
-    console.log('Mobile bottom nav:', mobileBottomNav);
-    console.log('Mobile nav items:', mobileNavItems);
 
     if (!navbar) {
         console.error('Navbar element not found!');
-        console.error('Available elements with id:', document.querySelectorAll('[id]'));
         return;
-    }
-    
-    // Debug: Check navbar styles
-    const navbarStyles = window.getComputedStyle(navbar);
-    console.log('Navbar computed styles:', {
-        position: navbarStyles.position,
-        top: navbarStyles.top,
-        left: navbarStyles.left,
-        width: navbarStyles.width,
-        height: navbarStyles.height,
-        display: navbarStyles.display,
-        visibility: navbarStyles.visibility,
-        zIndex: navbarStyles.zIndex,
-        backgroundColor: navbarStyles.backgroundColor
-    });
-    
-    // Debug: Check if navbar is in viewport
-    const navbarRect = navbar.getBoundingClientRect();
-    console.log('Navbar bounding rect:', navbarRect);
-    console.log('Viewport dimensions:', {
-        width: window.innerWidth,
-        height: window.innerHeight
-    });
-    
-    // Debug: Check navbar parent elements
-    let parent = navbar.parentElement;
-    let depth = 0;
-    while (parent && depth < 5) {
-        console.log(`Parent ${depth}:`, parent.tagName, parent.className, parent.id);
-        const parentStyles = window.getComputedStyle(parent);
-        console.log(`Parent ${depth} styles:`, {
-            position: parentStyles.position,
-            overflow: parentStyles.overflow,
-            display: parentStyles.display
-        });
-        parent = parent.parentElement;
-        depth++;
     }
 
     // Navbar transparency on scroll
@@ -93,18 +42,12 @@ function initializeNavigation() {
         link.addEventListener('click', (e) => {
             const href = link.getAttribute('href');
             
-            // Allow external links and page navigation to work normally
-            if (href.startsWith('http') || 
-                href.startsWith('/career-objective') || href.startsWith('career-objective/') || href.startsWith('./career-objective/') || 
-                href.startsWith('/personal-management') || href.startsWith('personal-management/') || href.startsWith('./personal-management/') ||
-                href.startsWith('/personal-interests') || href.startsWith('personal-interests/') || href.startsWith('./personal-interests/') ||
-                href.startsWith('/work-history') || href.startsWith('work-history/') || href.startsWith('./work-history/') ||
-                href.startsWith('/career-skills') || href.startsWith('career-skills/') || href.startsWith('./career-skills/') ||
-                href.startsWith('/awards-achievements') || href.startsWith('awards-achievements/') || href.startsWith('./awards-achievements/') ||
-                href.startsWith('/cover-letter') || href.startsWith('cover-letter/') || href.startsWith('./cover-letter/') ||
-                href.startsWith('/references') || href.startsWith('references/') || href.startsWith('./references/') ||
-                href.startsWith('/portfolio') || href.startsWith('portfolio/') || href.startsWith('./portfolio/') ||
-                href === '/') {
+            // Allow external links to work normally
+            if (href.startsWith('http') || href.startsWith('career-objective/') || href.startsWith('./career-objective/') || 
+                href.startsWith('personal-management/') || href.startsWith('./personal-management/') ||
+                href.startsWith('work-history/') || href.startsWith('./work-history/') ||
+                href.startsWith('career-skills/') || href.startsWith('./career-skills/') ||
+                href.startsWith('awards-achievements/') || href.startsWith('./awards-achievements/')) {
                 return; // Don't prevent default, let the link work normally
             }
             
@@ -377,148 +320,159 @@ function initializeNavigation() {
 
     console.log('Navigation initialization complete!');
 }
-// Intersection Observer for scroll animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
 
-// Observe content sections for animation
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     initializeNavigation();
-    const contentSections = document.querySelectorAll('.content-section');
-    
-    contentSections.forEach(section => {
-        section.style.opacity = '0';
-        section.style.transform = 'translateY(30px)';
-        section.style.transition = 'all 0.8s ease-out';
-        observer.observe(section);
-    });
-});
 
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero');
-    const heroContent = document.querySelector('.hero-content');
-    
-    if (hero && heroContent) {
-        const rate = scrolled * -0.3;
-        heroContent.style.transform = `translateY(${rate}px)`;
-    }
-});
-
-// Add hover effects to CTA buttons
-document.addEventListener('DOMContentLoaded', () => {
-    const ctaButtons = document.querySelectorAll('.cta-btn');
-    
-    ctaButtons.forEach(button => {
-        button.addEventListener('mouseenter', () => {
-            button.style.transform = 'translateY(-3px) scale(1.05)';
+    // Add hover effects to reference cards
+    const referenceCards = document.querySelectorAll('.reference-card');
+    referenceCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.02)';
         });
         
-        button.addEventListener('mouseleave', () => {
-            button.style.transform = 'translateY(0) scale(1)';
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
         });
     });
-});
 
-
-
-// Typing effect for slogan
-function typeWriter(element, text, speed = 100) {
-    let i = 0;
-    element.innerHTML = '';
-    
-    function type() {
-        if (i < text.length) {
-            element.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
-        }
-    }
-    
-    type();
-}
-
-// Initialize typing effect when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    const slogan = document.querySelector('.slogan');
-    if (slogan) {
-        const originalText = slogan.textContent;
-        typeWriter(slogan, originalText, 50);
-    }
-});
-
-
-
-// Add loading animation
-window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-    
-    // Animate hero elements sequentially
-    const heroElements = document.querySelectorAll('.hero-content > *');
-    heroElements.forEach((element, index) => {
-        element.style.animationDelay = `${index * 0.2}s`;
+    // Add click-to-copy functionality for phone numbers
+    const phoneNumbers = document.querySelectorAll('.contact-phone');
+    phoneNumbers.forEach(phone => {
+        phone.style.cursor = 'pointer';
+        phone.title = 'Click to copy';
+        
+        phone.addEventListener('click', function() {
+            const text = this.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                // Show temporary feedback
+                const originalText = this.textContent;
+                this.textContent = 'Copied!';
+                this.style.color = '#28a745';
+                
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.style.color = '#4D869B';
+                }, 1500);
+            }).catch(err => {
+                console.log('Failed to copy text: ', err);
+            });
+        });
     });
-});
 
-// Add CSS class for loaded state
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
+    // Add smooth reveal animation for reference cards
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe all reference cards and testimonials
+    const animatedElements = document.querySelectorAll('.reference-card, .testimonial-card');
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+
+    // Add loading animation for the page
+    window.addEventListener('load', function() {
         document.body.classList.add('loaded');
-    }, 100);
-});
+    });
 
-// URL Cleaning Function - Prevents index.html from being appended to URLs
-function cleanURLs() {
-    // Get current URL
-    const currentURL = window.location.href;
+    // Add print button for references
+    const printButton = document.createElement('button');
+    printButton.textContent = 'Print References';
+    printButton.className = 'print-button';
+    printButton.style.cssText = `
+        position: fixed;
+        top: 120px;
+        right: 20px;
+        background: #4D869B;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 1000;
+        transition: all 0.3s ease;
+    `;
     
-    // Check if we're on a page with index.html in the URL
-    if (currentURL.includes('/index.html')) {
-        // Remove index.html from the URL
-        const cleanURL = currentURL.replace('/index.html', '');
-        
-        // Update browser history without reloading the page
-        window.history.replaceState({}, document.title, cleanURL);
-        
-        console.log('Cleaned URL from:', currentURL, 'to:', cleanURL);
-    }
-}
+    printButton.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-2px)';
+        this.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
+    });
+    
+    printButton.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+        this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+    });
+    
+    printButton.addEventListener('click', function() {
+        window.print();
+    });
+    
+    document.body.appendChild(printButton);
 
-// Clean URLs when page loads
-document.addEventListener('DOMContentLoaded', cleanURLs);
-
-// Also clean URLs when navigating (for single-page app behavior)
-window.addEventListener('popstate', cleanURLs);
-
-// Intercept navigation clicks to prevent index.html from being added
-document.addEventListener('click', function(event) {
-    // Check if the clicked element is a navigation link
-    if (event.target.tagName === 'A' && event.target.href) {
-        const href = event.target.href;
-        
-        // If the link would result in index.html being added, prevent it
-        if (href.includes('/index.html')) {
-            event.preventDefault();
-            
-            // Navigate to the clean URL instead
-            const cleanHref = href.replace('/index.html', '');
-            window.location.href = cleanHref;
+    // Hide print button on mobile
+    function handleResize() {
+        if (window.innerWidth <= 768) {
+            printButton.style.display = 'none';
+        } else {
+            printButton.style.display = 'block';
         }
     }
+    
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial check
 });
 
+// Add CSS for print styles
+const printStyles = `
+    @media print {
+        .navbar, .mobile-bottom-nav, .print-button {
+            display: none !important;
+        }
+        
+        .main-content {
+            padding-top: 0 !important;
+        }
+        
+        .reference-card, .testimonial-card {
+            break-inside: avoid;
+            box-shadow: none !important;
+            border: 1px solid #ccc !important;
+        }
+        
+        body {
+            background: white !important;
+            color: black !important;
+        }
+        
+        .page-title, .section-title {
+            color: black !important;
+            text-shadow: none !important;
+        }
+        
+        .page-subtitle {
+            color: #333 !important;
+        }
+    }
+`;
 
-
-
+// Inject print styles
+const styleSheet = document.createElement('style');
+styleSheet.textContent = printStyles;
+document.head.appendChild(styleSheet);

@@ -1612,3 +1612,288 @@ body {
         height: 18px;
     }
 }
+
+/* Service Report Section Styles */
+.service-report-section {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, rgba(77, 134, 155, 0.05) 0%, rgba(167, 139, 250, 0.05) 100%);
+}
+
+.service-report-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.service-report-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    transition: all 0.3s ease;
+}
+
+.service-report-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: rgba(167, 139, 250, 0.4);
+}
+
+.service-report-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.service-report-card h3 {
+    color: #333D57;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-family: 'Playfair Display', serif;
+}
+
+.service-report-description {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+.service-report-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.download-btn, .preview-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.download-btn {
+    background: linear-gradient(135deg, #4D869B 0%, #5A9BB3 100%);
+    color: white;
+}
+
+.download-btn:hover {
+    background: linear-gradient(135deg, #3D7689 0%, #4A8AA3 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(77, 134, 155, 0.3);
+}
+
+.preview-btn {
+    background: linear-gradient(135deg, #A78BFA 0%, #C4B5FD 100%);
+    color: white;
+}
+
+.preview-btn:hover {
+    background: linear-gradient(135deg, #9674E8 0%, #B39DFC 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(167, 139, 250, 0.3);
+}
+
+.download-icon, .preview-icon {
+    font-size: 1rem;
+}
+
+.service-report-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.file-size, .file-type {
+    color: #888;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    background: rgba(167, 139, 250, 0.1);
+    border-radius: 15px;
+}
+
+/* PDF Modal Styles */
+.pdf-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.pdf-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pdf-modal-content {
+    background: white;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.pdf-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, #4D869B 0%, #5A9BB3 100%);
+    color: white;
+}
+
+.pdf-modal-header h3 {
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+}
+
+.pdf-modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.pdf-modal-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.pdf-modal-body {
+    padding: 0;
+    background: #f5f5f5;
+}
+
+.pdf-modal-body iframe {
+    border: none;
+    display: block;
+}
+
+.pdf-modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.pdf-modal-footer .download-btn {
+    margin: 0;
+}
+
+.close-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design for Service Report */
+@media (max-width: 768px) {
+    .service-report-card {
+        padding: 2rem 1.5rem;
+        margin: 0 1rem;
+    }
+    
+    .service-report-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .download-btn, .preview-btn {
+        width: 100%;
+        max-width: 250px;
+        justify-content: center;
+    }
+    
+    .service-report-meta {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .pdf-modal-content {
+        width: 95%;
+        margin: 1rem;
+    }
+    
+    .pdf-modal-header,
+    .pdf-modal-footer {
+        padding: 1rem 1.5rem;
+    }
+    
+    .pdf-modal-body iframe {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .service-report-card {
+        padding: 1.5rem 1rem;
+    }
+    
+    .service-report-icon {
+        font-size: 2.5rem;
+    }
+    
+    .pdf-modal-content {
+        width: 98%;
+        margin: 0.5rem;
+    }
+    
+    .pdf-modal-body iframe {
+        height: 300px;
+    }
+}

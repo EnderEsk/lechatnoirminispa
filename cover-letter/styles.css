@@ -1,0 +1,237 @@
+/* Cover Letter Page Styles */
+
+/* Import navigation and footer styles */
+@import url('../components/navbar.css');
+@import url('../components/footer.css');
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+/* Main Content */
+.main-content {
+    padding-top: 120px;
+    padding-bottom: 2rem;
+    min-height: calc(100vh - 120px);
+}
+
+/* Cover Letter Container */
+.cover-letter-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cover-letter-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4D869B, #A78BFA, #4D869B);
+    background-size: 200% 100%;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Cover Letter Header */
+.cover-letter-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.cover-letter-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.cover-letter-header .subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 400;
+}
+
+/* Cover Letter Content */
+.cover-letter-content {
+    position: relative;
+}
+
+/* Letter Header Section */
+.letter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    border-left: 4px solid #4D869B;
+}
+
+.sender-info h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.sender-info p {
+    color: #555;
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+}
+
+.sender-info p:last-child {
+    margin-bottom: 0;
+    font-weight: 500;
+    color: #4D869B;
+}
+
+.letter-date {
+    text-align: right;
+    color: #666;
+    font-style: italic;
+}
+
+/* Letter Body */
+.letter-body {
+    line-height: 1.8;
+}
+
+.letter-body p {
+    margin-bottom: 1.2rem;
+    text-align: justify;
+    color: #444;
+    font-size: 1rem;
+}
+
+.greeting {
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.closing {
+    margin-top: 2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-content {
+        padding-top: 100px;
+        padding-bottom: 1rem;
+    }
+    
+    .cover-letter-container {
+        margin: 1rem;
+        padding: 1.5rem;
+        border-radius: 15px;
+    }
+    
+    .cover-letter-header h1 {
+        font-size: 2rem;
+    }
+    
+    .letter-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .letter-date {
+        text-align: center;
+    }
+    
+    .sender-info h2 {
+        font-size: 1.5rem;
+    }
+    
+    .letter-body p {
+        font-size: 0.95rem;
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+    .cover-letter-container {
+        margin: 0.5rem;
+        padding: 1rem;
+    }
+    
+    .cover-letter-header {
+        margin-bottom: 2rem;
+    }
+    
+    .cover-letter-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .letter-header {
+        padding: 1rem;
+    }
+    
+    .sender-info h2 {
+        font-size: 1.3rem;
+    }
+    
+    .letter-body p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .navbar,
+    .mobile-bottom-nav,
+    .footer {
+        display: none;
+    }
+    
+    .main-content {
+        padding-top: 0;
+    }
+    
+    .cover-letter-container {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        border-radius: 0;
+    }
+    
+    .cover-letter-container::before {
+        display: none;
+    }
+    
+    body {
+        background: white;
+    }
+}

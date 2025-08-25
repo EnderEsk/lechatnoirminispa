@@ -731,4 +731,69 @@ function setupAutoRefresh() {
 // Initialize auto-refresh (uncomment if desired)
 // setupAutoRefresh();
 
+// PDF Preview Functionality
+function openPdfPreview() {
+    const modal = document.getElementById('pdfModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        // Focus on the modal for accessibility
+        modal.focus();
+        
+        // Add escape key listener
+        document.addEventListener('keydown', handleEscapeKey);
+        
+        // Add click outside to close
+        modal.addEventListener('click', handleModalOutsideClick);
+        
+        console.log('PDF preview modal opened');
+    }
+}
+
+function closePdfPreview() {
+    const modal = document.getElementById('pdfModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        // Remove event listeners
+        document.removeEventListener('keydown', handleEscapeKey);
+        modal.removeEventListener('click', handleModalOutsideClick);
+        
+        console.log('PDF preview modal closed');
+    }
+}
+
+function handleEscapeKey(e) {
+    if (e.key === 'Escape') {
+        closePdfPreview();
+    }
+}
+
+function handleModalOutsideClick(e) {
+    if (e.target === e.currentTarget) {
+        closePdfPreview();
+    }
+}
+
+// Close modal when clicking on close button or outside
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('pdfModal');
+    if (modal) {
+        // Close modal when clicking on close button
+        const closeBtn = modal.querySelector('.pdf-modal-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closePdfPreview);
+        }
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closePdfPreview();
+            }
+        });
+    }
+});
+
 console.log('Awards & Achievements JavaScript (JSON-based) loaded successfully');

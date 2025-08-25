@@ -25,6 +25,7 @@
                     <div class="nav-links-container">
                         <a href="/career-objective" class="nav-link">Career Objective</a>
                         <a href="/personal-management" class="nav-link">Personal Management</a>
+                        <a href="/personal-interests" class="nav-link">Personal Interests</a>
                     </div>
                 </div>
                 
@@ -46,10 +47,9 @@
                 <div class="nav-group">
                     <span class="group-title">Documents</span>
                     <div class="nav-links-container">
-                        <a href="#cover-letter" class="nav-link">Cover Letter</a>
-                        <a href="#resume" class="nav-link">Resume</a>
-                        <a href="#references" class="nav-link">References</a>
-                        <a href="#portfolio" class="nav-link">Portfolio</a>
+                        <a href="/cover-letter" class="nav-link">Cover Letter</a>
+                        <a href="/references" class="nav-link">References</a>
+                        <a href="/portfolio" class="nav-link">Portfolio</a>
                     </div>
                 </div>
             </div>
@@ -73,6 +73,7 @@
                     <div class="mobile-nav-links-container" id="profile-links">
                         <a href="/career-objective" class="mobile-nav-link">Career Objective</a>
                         <a href="/personal-management" class="mobile-nav-link">Personal Management</a>
+                        <a href="/personal-interests" class="mobile-nav-link">Personal Interests</a>
                     </div>
                 </div>
                 
@@ -94,10 +95,9 @@
                 <div class="mobile-nav-group">
                     <span class="mobile-group-title" data-group="documents">Documents</span>
                     <div class="mobile-nav-links-container" id="documents-links">
-                        <a href="#cover-letter" class="mobile-nav-link">Cover Letter</a>
-                        <a href="#resume" class="mobile-nav-link">Resume</a>
-                        <a href="#references" class="mobile-nav-link">References</a>
-                        <a href="#portfolio" class="mobile-nav-link">Portfolio</a>
+                        <a href="/cover-letter" class="mobile-nav-link">Cover Letter</a>
+                        <a href="/references" class="mobile-nav-link">References</a>
+                        <a href="/portfolio" class="mobile-nav-link">Portfolio</a>
                     </div>
                 </div>
             </div>
@@ -113,6 +113,7 @@
                 <div class="submenu-bubble" id="profile-submenu">
                     <a href="/career-objective" class="submenu-bubble-item">Career Objective</a>
                     <a href="/personal-management" class="submenu-bubble-item">Personal Management</a>
+                    <a href="/personal-interests" class="submenu-bubble-item">Personal Interests</a>
                 </div>
             </div>
             
@@ -135,7 +136,7 @@
                 <div class="mobile-nav-icon icon-recognition"></div>
                 <span class="mobile-nav-text">Recognition</span>
                 <div class="submenu-bubble" id="recognition-submenu">
-                    <a href="/awards-achievements" class="submenu-bubble-item">Awards & Achievements</a>
+                    <a href="#awards" class="submenu-bubble-item">Awards & Achievements</a>
                 </div>
             </div>
             
@@ -143,10 +144,9 @@
                 <div class="mobile-nav-icon icon-documents"></div>
                 <span class="mobile-nav-text">Documents</span>
                 <div class="submenu-bubble" id="documents-submenu">
-                    <a href="#cover-letter" class="submenu-bubble-item">Cover Letter</a>
-                    <a href="#resume" class="submenu-bubble-item">Resume</a>
-                    <a href="#references" class="submenu-bubble-item">References</a>
-                    <a href="#portfolio" class="submenu-bubble-item">Portfolio</a>
+                    <a href="/cover-letter" class="submenu-bubble-item">Cover Letter</a>
+                    <a href="/references" class="submenu-bubble-item">References</a>
+                    <a href="/portfolio" class="submenu-bubble-item">Portfolio</a>
                 </div>
             </div>
         </div>
@@ -224,6 +224,38 @@
             </div>
         </section>
 
+        <!-- Service Report Section -->
+        <section class="service-report-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Service Report</h2>
+                    <div class="decorative-line"></div>
+                    <p class="section-description">Download and preview our comprehensive service report showcasing our commitment to excellence and detailed service documentation.</p>
+                </div>
+                <div class="service-report-container">
+                    <div class="service-report-card">
+                        <div class="service-report-icon">📋</div>
+                        <h3>Service Report 2024</h3>
+                        <p class="service-report-description">A comprehensive overview of our spa services, client satisfaction metrics, and operational excellence achievements.</p>
+                        <div class="service-report-actions">
+                            <a href="servicereport.pdf" download class="download-btn">
+                                <span class="download-icon">⬇️</span>
+                                Download PDF
+                            </a>
+                            <button class="preview-btn" onclick="openPdfPreview()">
+                                <span class="preview-icon">👁️</span>
+                                Preview PDF
+                            </button>
+                        </div>
+                        <div class="service-report-meta">
+                            <span class="file-size">File Size: 142 KB</span>
+                            <span class="file-type">Format: PDF</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Data Management Info -->
         <section class="data-info-section">
             <div class="container">
@@ -254,6 +286,26 @@
             </div>
         </section>
     </main>
+
+    <!-- PDF Preview Modal -->
+    <div id="pdfModal" class="pdf-modal">
+        <div class="pdf-modal-content">
+            <div class="pdf-modal-header">
+                <h3>Service Report Preview</h3>
+                <button class="pdf-modal-close" onclick="closePdfPreview()">&times;</button>
+            </div>
+            <div class="pdf-modal-body">
+                <iframe id="pdfViewer" src="servicereport.pdf" width="100%" height="600px"></iframe>
+            </div>
+            <div class="pdf-modal-footer">
+                <a href="servicereport.pdf" download class="download-btn">
+                    <span class="download-icon">⬇️</span>
+                    Download PDF
+                </a>
+                <button class="close-btn" onclick="closePdfPreview()">Close</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">

@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Chat Noir Mini Spa - Luxury Spa & Beauty Center</title>
+    <title>Portfolio - Le Chat Noir Mini Spa</title>
+    <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="components/navbar.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation Bar Component will be loaded here -->
-    <!-- Navigation Bar Placeholder -->
+    <!-- Navigation Bar -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="logo">
                 <a href="/" class="logo-link">
-                    <img src="logo-test.png" alt="Le Chat Noir Logo" class="logo-image">
+                    <img src="../logo-test.png" alt="Le Chat Noir Logo" class="logo-image">
                 </a>
             </div>
             
@@ -129,7 +128,7 @@
             
             <div class="mobile-nav-item center-item" data-section="home">
                 <a href="/" class="center-logo-link">
-                    <img src="logo-test.png" alt="Le Chat Noir Logo" class="center-logo-image">
+                    <img src="../logo-test.png" alt="Le Chat Noir Logo" class="center-logo-image">
                 </a>
             </div>
             
@@ -137,7 +136,7 @@
                 <div class="mobile-nav-icon icon-recognition"></div>
                 <span class="mobile-nav-text">Recognition</span>
                 <div class="submenu-bubble" id="recognition-submenu">
-                    <a href="#awards" class="submenu-bubble-item">Awards & Achievements</a>
+                    <a href="/awards-achievements" class="submenu-bubble-item">Awards & Achievements</a>
                 </div>
             </div>
             
@@ -153,32 +152,125 @@
         </div>
         <div class="home-indicator"></div>
     </div>
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <div class="hero-profile-section">
-                <h1 class="business-name curved-text top-curve">Le Chat Noir</h1>
-                <div class="profile-image-container">
-                    <img src="me.webp" alt="Profile Photo" class="profile-image">
+
+    <!-- Main Content -->
+    <main class="portfolio-main">
+        <!-- Hero Section -->
+        <section class="portfolio-hero">
+            <div class="portfolio-hero-overlay"></div>
+            <div class="portfolio-hero-content">
+                <h1 class="portfolio-title">Portfolio</h1>
+                <p class="portfolio-subtitle">Showcasing Creative Work & Professional Projects</p>
+            </div>
+            <div class="floating-elements">
+                <div class="floating-element element-1"></div>
+                <div class="floating-element element-2"></div>
+                <div class="floating-element element-3"></div>
+                <div class="floating-element element-4"></div>
+            </div>
+        </section>
+
+        <!-- Portfolio Gallery Section -->
+        <section class="portfolio-gallery-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Before & After Gallery</h2>
+                    <div class="decorative-line"></div>
+                    <p class="section-description">Transformative results showcasing the impact of professional esthetic services.</p>
                 </div>
-                <h2 class="business-subtitle curved-text bottom-curve">Mini Spa</h2>
+                
+                <div class="portfolio-grid">
+                    <!-- Pair 1: Before & After 1 -->
+                    <div class="portfolio-pair">
+                        <div class="portfolio-item before-item">
+                            <div class="portfolio-image-container">
+                                <img src="images/before1.png" alt="Before treatment 1" class="portfolio-image">
+                                <div class="portfolio-overlay">
+                                    <span class="portfolio-label">Before</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portfolio-item after-item">
+                            <div class="portfolio-image-container">
+                                <img src="images/after1.png" alt="After treatment 1" class="portfolio-image">
+                                <div class="portfolio-overlay">
+                                    <span class="portfolio-label">After</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pair 2: Before & After 2 -->
+                    <div class="portfolio-pair">
+                        <div class="portfolio-item before-item">
+                            <div class="portfolio-image-container">
+                                <img src="images/before2.png" alt="Before treatment 2" class="portfolio-image">
+                                <div class="portfolio-overlay">
+                                    <span class="portfolio-label">Before</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portfolio-item after-item">
+                            <div class="portfolio-image-container">
+                                <img src="images/after2.png" alt="After treatment 2" class="portfolio-image">
+                                <div class="portfolio-overlay">
+                                    <span class="portfolio-label">After</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pair 3: Before & After 3 -->
+                    <div class="portfolio-pair">
+                        <div class="portfolio-item before-item">
+                            <div class="portfolio-image-container">
+                                <img src="images/before3.png" alt="Before treatment 3" class="portfolio-image">
+                                <div class="portfolio-overlay">
+                                    <span class="portfolio-label">Before</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portfolio-item after-item">
+                            <div class="portfolio-image-container">
+                                <img src="images/after3.png" alt="After treatment 3" class="portfolio-image">
+                                <div class="portfolio-overlay">
+                                    <span class="portfolio-label">After</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pair 4: Before & After 4 -->
+                    <div class="portfolio-pair">
+                        <div class="portfolio-item before-item">
+                            <div class="portfolio-image-container">
+                                <img src="images/before4.png" alt="Before treatment 4" class="portfolio-image">
+                                <div class="portfolio-overlay">
+                                    <span class="portfolio-label">Before</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portfolio-item after-item">
+                            <div class="portfolio-image-container">
+                                <img src="images/after4.png" alt="After treatment 4" class="portfolio-image">
+                                <div class="portfolio-overlay">
+                                    <span class="portfolio-label">After</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p class="slogan">Where luxury meets tranquility, and every moment becomes a cherished memory</p>
-            <div class="cta-buttons">
-                <button class="cta-btn primary">About Me</button>
-                <button class="cta-btn secondary">Career Portfolio</button>
-            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Le Chat Noir Mini Spa. All rights reserved.</p>
         </div>
-    </section>
+    </footer>
 
-   
-
-    <!-- Footer Component will be loaded here -->
-    <div id="footer-placeholder"></div>
-
-   
-    <script src="components/footer-loader.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,7 +1,6 @@
+// Personal Interests Page JavaScript
 
-// Personal Management Page JavaScript
-
-// Navigation functionality
+// Initialize navigation functionality after DOM elements are available
 function initializeNavigation() {
     console.log('Initializing navigation...');
     
@@ -22,61 +21,12 @@ function initializeNavigation() {
         navLinks: navLinks.length,
         navGroups: navGroups.length,
         mobileBottomNav: !!mobileBottomNav,
-        mobileNavItems: mobileNavItems.length,
-        mobileMenuToggle: !!mobileMenuToggle,
-        mobileMenuOverlay: !!mobileMenuOverlay,
-        mobileMenuClose: !!mobileMenuClose,
-        mobileGroupTitles: mobileGroupTitles.length
+        mobileNavItems: mobileNavItems.length
     });
-    
-    // Debug: Log all found elements
-    console.log('Navbar element:', navbar);
-    console.log('Nav links:', navLinks);
-    console.log('Nav groups:', navGroups);
-    console.log('Mobile bottom nav:', mobileBottomNav);
-    console.log('Mobile nav items:', mobileNavItems);
 
     if (!navbar) {
         console.error('Navbar element not found!');
-        console.error('Available elements with id:', document.querySelectorAll('[id]'));
         return;
-    }
-    
-    // Debug: Check navbar styles
-    const navbarStyles = window.getComputedStyle(navbar);
-    console.log('Navbar computed styles:', {
-        position: navbarStyles.position,
-        top: navbarStyles.top,
-        left: navbarStyles.left,
-        width: navbarStyles.width,
-        height: navbarStyles.height,
-        display: navbarStyles.display,
-        visibility: navbarStyles.visibility,
-        zIndex: navbarStyles.zIndex,
-        backgroundColor: navbarStyles.backgroundColor
-    });
-    
-    // Debug: Check if navbar is in viewport
-    const navbarRect = navbar.getBoundingClientRect();
-    console.log('Navbar bounding rect:', navbarRect);
-    console.log('Viewport dimensions:', {
-        width: window.innerWidth,
-        height: window.innerHeight
-    });
-    
-    // Debug: Check navbar parent elements
-    let parent = navbar.parentElement;
-    let depth = 0;
-    while (parent && depth < 5) {
-        console.log(`Parent ${depth}:`, parent.tagName, parent.className, parent.id);
-        const parentStyles = window.getComputedStyle(parent);
-        console.log(`Parent ${depth} styles:`, {
-            position: parentStyles.position,
-            overflow: parentStyles.overflow,
-            display: parentStyles.display
-        });
-        parent = parent.parentElement;
-        depth++;
     }
 
     // Navbar transparency on scroll
@@ -93,18 +43,14 @@ function initializeNavigation() {
         link.addEventListener('click', (e) => {
             const href = link.getAttribute('href');
             
-            // Allow external links and page navigation to work normally
-            if (href.startsWith('http') || 
-                href.startsWith('/career-objective') || href.startsWith('career-objective/') || href.startsWith('./career-objective/') || 
-                href.startsWith('/personal-management') || href.startsWith('personal-management/') || href.startsWith('./personal-management/') ||
-                href.startsWith('/personal-interests') || href.startsWith('personal-interests/') || href.startsWith('./personal-interests/') ||
-                href.startsWith('/work-history') || href.startsWith('work-history/') || href.startsWith('./work-history/') ||
-                href.startsWith('/career-skills') || href.startsWith('career-skills/') || href.startsWith('./career-skills/') ||
-                href.startsWith('/awards-achievements') || href.startsWith('awards-achievements/') || href.startsWith('./awards-achievements/') ||
-                href.startsWith('/cover-letter') || href.startsWith('cover-letter/') || href.startsWith('./cover-letter/') ||
-                href.startsWith('/references') || href.startsWith('references/') || href.startsWith('./references/') ||
-                href.startsWith('/portfolio') || href.startsWith('portfolio/') || href.startsWith('./portfolio/') ||
-                href === '/') {
+            // Allow external links to work normally
+            if (href.startsWith('http') || href.startsWith('career-objective/') || href.startsWith('./career-objective/') || 
+                href.startsWith('personal-management/') || href.startsWith('./personal-management/') ||
+                href.startsWith('personal-interests/') || href.startsWith('./personal-interests/') ||
+                href.startsWith('work-history/') || href.startsWith('./work-history/') ||
+                href.startsWith('career-skills/') || href.startsWith('./career-skills/') ||
+                href.startsWith('awards-achievements/') || href.startsWith('./awards-achievements/') ||
+                href.startsWith('cover-letter/') || href.startsWith('./cover-letter/')) {
                 return; // Don't prevent default, let the link work normally
             }
             
@@ -188,9 +134,18 @@ function initializeNavigation() {
             } else if (currentPath.includes('career-objective/index.html')) {
                 const profileItem = document.querySelector('[data-section="profile"]');
                 if (profileItem) profileItem.classList.add('active');
+            } else if (currentPath.includes('personal-interests/index.html')) {
+                const profileItem = document.querySelector('[data-section="profile"]');
+                if (profileItem) profileItem.classList.add('active');
             } else if (currentPath.includes('work-history/index.html')) {
                 const experienceItem = document.querySelector('[data-section="experience"]');
                 if (experienceItem) experienceItem.classList.add('active');
+            } else if (currentPath.includes('career-skills/index.html')) {
+                const experienceItem = document.querySelector('[data-section="experience"]');
+                if (experienceItem) experienceItem.classList.add('active');
+            } else if (currentPath.includes('cover-letter/index.html')) {
+                const documentsItem = document.querySelector('[data-section="documents"]');
+                if (documentsItem) documentsItem.classList.add('active');
             } else if (currentPath === '/' || currentPath.endsWith('index.html')) {
                 const homeItem = document.querySelector('[data-section="home"]');
                 if (homeItem) homeItem.classList.add('active');
@@ -377,148 +332,118 @@ function initializeNavigation() {
 
     console.log('Navigation initialization complete!');
 }
-// Intersection Observer for scroll animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observe content sections for animation
-document.addEventListener('DOMContentLoaded', () => {
-    initializeNavigation();
-    const contentSections = document.querySelectorAll('.content-section');
+// Initialize scroll animations for interests sections
+function initializeScrollAnimations() {
+    const interestSections = document.querySelectorAll('.interest-section');
     
-    contentSections.forEach(section => {
-        section.style.opacity = '0';
-        section.style.transform = 'translateY(30px)';
-        section.style.transition = 'all 0.8s ease-out';
+    if (interestSections.length === 0) {
+        console.log('No interest sections found for animation');
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                console.log('Section animated:', entry.target.querySelector('h2')?.textContent);
+            }
+        });
+    }, {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    interestSections.forEach(section => {
         observer.observe(section);
+        console.log('Observing section:', section.querySelector('h2')?.textContent);
     });
-});
-
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero');
-    const heroContent = document.querySelector('.hero-content');
-    
-    if (hero && heroContent) {
-        const rate = scrolled * -0.3;
-        heroContent.style.transform = `translateY(${rate}px)`;
-    }
-});
-
-// Add hover effects to CTA buttons
-document.addEventListener('DOMContentLoaded', () => {
-    const ctaButtons = document.querySelectorAll('.cta-btn');
-    
-    ctaButtons.forEach(button => {
-        button.addEventListener('mouseenter', () => {
-            button.style.transform = 'translateY(-3px) scale(1.05)';
-        });
-        
-        button.addEventListener('mouseleave', () => {
-            button.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-});
-
-
-
-// Typing effect for slogan
-function typeWriter(element, text, speed = 100) {
-    let i = 0;
-    element.innerHTML = '';
-    
-    function type() {
-        if (i < text.length) {
-            element.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
-        }
-    }
-    
-    type();
 }
 
-// Initialize typing effect when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    const slogan = document.querySelector('.slogan');
-    if (slogan) {
-        const originalText = slogan.textContent;
-        typeWriter(slogan, originalText, 50);
-    }
-});
-
-
-
-// Add loading animation
-window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
+// Initialize footer functionality
+function initializeFooter() {
+    console.log('Footer.js: Initializing footer');
     
-    // Animate hero elements sequentially
-    const heroElements = document.querySelectorAll('.hero-content > *');
-    heroElements.forEach((element, index) => {
-        element.style.animationDelay = `${index * 0.2}s`;
-    });
-});
-
-// Add CSS class for loaded state
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        document.body.classList.add('loaded');
-    }, 100);
-});
-
-// URL Cleaning Function - Prevents index.html from being appended to URLs
-function cleanURLs() {
-    // Get current URL
-    const currentURL = window.location.href;
+    // Add smooth scrolling to footer links
+    const footerLinks = document.querySelectorAll('.footer-links a[href^="#"]');
+    console.log('Found footer links:', footerLinks.length);
     
-    // Check if we're on a page with index.html in the URL
-    if (currentURL.includes('/index.html')) {
-        // Remove index.html from the URL
-        const cleanURL = currentURL.replace('/index.html', '');
-        
-        // Update browser history without reloading the page
-        window.history.replaceState({}, document.title, cleanURL);
-        
-        console.log('Cleaned URL from:', currentURL, 'to:', cleanURL);
-    }
-}
-
-// Clean URLs when page loads
-document.addEventListener('DOMContentLoaded', cleanURLs);
-
-// Also clean URLs when navigating (for single-page app behavior)
-window.addEventListener('popstate', cleanURLs);
-
-// Intercept navigation clicks to prevent index.html from being added
-document.addEventListener('click', function(event) {
-    // Check if the clicked element is a navigation link
-    if (event.target.tagName === 'A' && event.target.href) {
-        const href = event.target.href;
-        
-        // If the link would result in index.html being added, prevent it
-        if (href.includes('/index.html')) {
-            event.preventDefault();
+    footerLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
             
-            // Navigate to the clean URL instead
-            const cleanHref = href.replace('/index.html', '');
-            window.location.href = cleanHref;
-        }
+            // Only handle internal anchor links
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                const targetId = href.substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }
+        });
+    });
+
+    // Add hover effects to social links
+    const socialLinks = document.querySelectorAll('.social-link');
+    console.log('Found social links:', socialLinks.length);
+    
+    socialLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            link.style.transform = 'translateY(-3px) scale(1.05)';
+        });
+        
+        link.addEventListener('mouseleave', () => {
+            link.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+
+    // Add intersection observer for footer animations
+    const footer = document.querySelector('.footer');
+    if (footer) {
+        console.log('Footer element found, setting up animations');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        // Set initial state
+        footer.style.opacity = '0';
+        footer.style.transform = 'translateY(30px)';
+        footer.style.transition = 'all 0.8s ease-out';
+        
+        observer.observe(footer);
+    } else {
+        console.log('Footer element not found');
     }
+}
+
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Personal Interests page loaded');
+    
+    // Initialize navigation
+    initializeNavigation();
+    
+    // Initialize scroll animations
+    initializeScrollAnimations();
+    
+    // Initialize footer
+    initializeFooter();
+    
+    console.log('Personal Interests page initialization complete!');
 });
 
-
-
-
+// Call initialization function immediately (for when script is injected)
+initializeNavigation();

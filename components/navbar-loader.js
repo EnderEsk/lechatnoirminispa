@@ -74,8 +74,17 @@ class NavigationLoader {
             // Fix logo image path
             processedHtml = processedHtml.replace('src="logo-test.png"', 'src="../logo-test.png"');
             
-            // Fix navigation links to use relative paths
-            processedHtml = processedHtml.replace(/href="\//g, 'href="../');
+            // Fix navigation links to use relative paths, but handle specific routes properly
+            processedHtml = processedHtml.replace(/href="\/([^"]+)"/g, (match, path) => {
+                // Handle specific routes that should work from subdirectories
+                if (path === 'cover-letter' || path === 'career-objective' || 
+                    path === 'personal-management' || path === 'personal-interests' || path === 'work-history' || 
+                    path === 'career-skills' || path === 'awards-achievements') {
+                    return `href="../${path}"`;
+                }
+                // For other absolute paths, convert to relative
+                return `href="../${path}"`;
+            });
             
             // Fix home link specifically
             processedHtml = processedHtml.replace('href="../"', 'href="../');
@@ -186,7 +195,16 @@ class NavigationLoader {
                         link.href = '../';
                     } else if (href.startsWith('/')) {
                         // Convert absolute paths to relative paths for subdirectories
-                        link.href = '..' + href;
+                        // Handle specific routes that should work from subdirectories
+                        const path = href.substring(1); // Remove the leading '/'
+                        if (path === 'cover-letter' || path === 'career-objective' || 
+                            path === 'personal-management' || path === 'personal-interests' || path === 'work-history' || 
+                            path === 'career-skills' || path === 'awards-achievements' || path === 'references') {
+                            link.href = `../${path}`;
+                        } else {
+                            // For other absolute paths, convert to relative paths
+                            link.href = '..' + href;
+                        }
                     }
                 } else {
                     // Keep absolute paths as is for root page
@@ -224,6 +242,7 @@ class NavigationLoader {
                             <div class="nav-links-container">
                                 <a href="${pathPrefix}career-objective" class="nav-link">Career Objective</a>
                                 <a href="${pathPrefix}personal-management" class="nav-link">Personal Management</a>
+                                <a href="${pathPrefix}personal-interests" class="nav-link">Personal Interests</a>
                             </div>
                         </div>
                         
@@ -245,7 +264,7 @@ class NavigationLoader {
                         <div class="nav-group">
                             <span class="group-title">Documents</span>
                             <div class="nav-links-container">
-                                <a href="#cover-letter" class="nav-link">Cover Letter</a>
+                                <a href="${pathPrefix}cover-letter" class="nav-link">Cover Letter</a>
                                 <a href="#resume" class="nav-link">Resume</a>
                                 <a href="#references" class="nav-link">References</a>
                                 <a href="#portfolio" class="nav-link">Portfolio</a>
@@ -272,6 +291,7 @@ class NavigationLoader {
                             <div class="mobile-nav-links-container" id="profile-links">
                                 <a href="${pathPrefix}career-objective" class="mobile-nav-link">Career Objective</a>
                                 <a href="${pathPrefix}personal-management" class="mobile-nav-link">Personal Management</a>
+                                <a href="${pathPrefix}personal-interests" class="mobile-nav-link">Personal Interests</a>
                             </div>
                         </div>
                         
@@ -293,7 +313,7 @@ class NavigationLoader {
                         <div class="mobile-nav-group">
                             <span class="mobile-group-title" data-group="documents">Documents</span>
                             <div class="mobile-nav-links-container" id="documents-links">
-                                <a href="#cover-letter" class="mobile-nav-link">Cover Letter</a>
+                                <a href="${pathPrefix}cover-letter" class="mobile-nav-link">Cover Letter</a>
                                 <a href="#resume" class="mobile-nav-link">Resume</a>
                                 <a href="#references" class="mobile-nav-link">References</a>
                                 <a href="#portfolio" class="mobile-nav-link">Portfolio</a>
@@ -312,6 +332,7 @@ class NavigationLoader {
                         <div class="submenu-bubble" id="profile-submenu">
                             <a href="${pathPrefix}career-objective" class="submenu-bubble-item">Career Objective</a>
                             <a href="${pathPrefix}personal-management" class="submenu-bubble-item">Personal Management</a>
+                            <a href="${pathPrefix}personal-interests" class="submenu-bubble-item">Personal Interests</a>
                         </div>
                     </div>
                     
@@ -342,10 +363,10 @@ class NavigationLoader {
                         <div class="mobile-nav-icon icon-documents"></div>
                         <span class="mobile-nav-text">Documents</span>
                         <div class="submenu-bubble" id="documents-submenu">
-                            <a href="#cover-letter" class="submenu-bubble-item">Cover Letter</a>
-                            <a href="#resume" class="submenu-bubble-item">Resume</a>
-                            <a href="#references" class="submenu-bubble-item">References</a>
-                            <a href="#portfolio" class="submenu-bubble-item">Portfolio</a>
+                                                    <a href="${pathPrefix}cover-letter" class="submenu-bubble-item">Cover Letter</a>
+                        <a href="#resume" class="submenu-bubble-item">Resume</a>
+                        <a href="${pathPrefix}references" class="submenu-bubble-item">References</a>
+                        <a href="#portfolio" class="submenu-bubble-item">Portfolio</a>
                         </div>
                     </div>
                 </div>
@@ -810,6 +831,9 @@ class NavigationLoader {
             } else if (currentPath.includes('awards-achievements')) {
                 const recognitionItem = document.querySelector('[data-section="recognition"]');
                 if (recognitionItem) recognitionItem.classList.add('active');
+            } else if (currentPath.includes('cover-letter')) {
+                const documentsItem = document.querySelector('[data-section="documents"]');
+                if (documentsItem) documentsItem.classList.add('active');
             }
         `;
         document.body.appendChild(scriptElement);
@@ -839,73 +863,137 @@ class NavigationLoader {
             return;
         }
 
-        // Set active state based on current page - only highlight the exact current page
-        if (currentPath.includes('personal-management/index.html')) {
-            const personalManagementLinks = document.querySelectorAll('a[href*="personal-management/index.html"]');
-            personalManagementLinks.forEach(link => {
-                link.classList.add('active');
-            });
-            // Set mobile navigation active state for profile section
-            const profileItem = document.querySelector('[data-section="profile"]');
-            if (profileItem) {
-                profileItem.classList.add('active');
-                
-                // Also highlight the Personal Management link in the submenu
-                const personalManagementSubmenuLink = profileItem.querySelector('a[href*="personal-management/index.html"]');
-                if (personalManagementSubmenuLink) {
-                    personalManagementSubmenuLink.classList.add('active');
+                    // Set active state based on current page - only highlight the exact current page
+            if (currentPath.includes('personal-management/index.html')) {
+                const personalManagementLinks = document.querySelectorAll('a[href*="personal-management/index.html"]');
+                personalManagementLinks.forEach(link => {
+                    link.classList.add('active');
+                });
+                // Set mobile navigation active state for profile section
+                const profileItem = document.querySelector('[data-section="profile"]');
+                if (profileItem) {
+                    profileItem.classList.add('active');
+                    
+                    // Also highlight the Personal Management link in the submenu
+                    const personalManagementSubmenuLink = profileItem.querySelector('a[href*="personal-management/index.html"]');
+                    if (personalManagementSubmenuLink) {
+                        personalManagementSubmenuLink.classList.add('active');
+                    }
                 }
-            }
-        } else if (currentPath.includes('career-objective/index.html')) {
-            const careerObjectiveLinks = document.querySelectorAll('a[href*="career-objective/index.html"]');
-            careerObjectiveLinks.forEach(link => {
-                link.classList.add('active');
-            });
-            console.log('Found career objective links:', careerObjectiveLinks.length);
-            
-            // Set mobile navigation active state for profile section
-            const profileItem = document.querySelector('[data-section="profile"]');
-            console.log('Profile item found:', !!profileItem);
-            if (profileItem) {
-                profileItem.classList.add('active');
-                console.log('Added active class to profile item');
+            } else if (currentPath.includes('career-objective/index.html')) {
+                const careerObjectiveLinks = document.querySelectorAll('a[href*="career-objective/index.html"]');
+                careerObjectiveLinks.forEach(link => {
+                    link.classList.add('active');
+                });
+                console.log('Found career objective links:', careerObjectiveLinks.length);
                 
-                // Also highlight the Career Objective link in the submenu
-                const careerObjectiveSubmenuLink = profileItem.querySelector('a[href*="career-objective/index.html"]');
-                console.log('Career Objective submenu link found:', !!careerObjectiveSubmenuLink);
-                if (careerObjectiveSubmenuLink) {
-                    careerObjectiveSubmenuLink.classList.add('active');
-                    console.log('Added active class to Career Objective submenu link');
+                // Set mobile navigation active state for profile section
+                const profileItem = document.querySelector('[data-section="profile"]');
+                console.log('Profile item found:', !!profileItem);
+                if (profileItem) {
+                    profileItem.classList.add('active');
+                    console.log('Added active class to profile item');
+                    
+                    // Also highlight the Career Objective link in the submenu
+                    const personalManagementSubmenuLink = profileItem.querySelector('a[href*="career-objective/index.html"]');
+                    console.log('Career Objective submenu link found:', !!personalManagementSubmenuLink);
+                    if (personalManagementSubmenuLink) {
+                        personalManagementSubmenuLink.classList.add('active');
+                        console.log('Added active class to Career Objective submenu link');
+                    } else {
+                        console.log('No Career Objective submenu link found in profile item');
+                        console.log('Profile item children:', profileItem.children);
+                        console.log('Profile item HTML:', profileItem.innerHTML);
+                    }
                 } else {
-                    console.log('No Career Objective submenu link found in profile item');
-                    console.log('Profile item children:', profileItem.children);
-                    console.log('Profile item HTML:', profileItem.innerHTML);
+                    console.log('Profile item not found, searching for data-section="profile"');
+                    console.log('All mobile nav items:', document.querySelectorAll('.mobile-nav-item'));
                 }
-            } else {
-                console.log('Profile item not found, searching for data-section="profile"');
-                console.log('All mobile nav items:', document.querySelectorAll('.mobile-nav-item'));
-            }
-        } else if (currentPath.includes('work-history/index.html')) {
-            const workHistoryLinks = document.querySelectorAll('a[href*="work-history/index.html"]');
-            workHistoryLinks.forEach(link => {
-                link.classList.add('active');
-            });
-            // Set mobile navigation active state for experience section
-            const experienceItem = document.querySelector('[data-section="experience"]');
-            if (experienceItem) {
-                experienceItem.classList.add('active');
-                
-                // Also highlight the Work History link in the submenu
-                const workHistorySubmenuLink = experienceItem.querySelector('a[href*="work-history/index.html"]');
-                if (workHistorySubmenuLink) {
-                    workHistorySubmenuLink.classList.add('active');
+            } else if (currentPath.includes('personal-interests/index.html')) {
+                const personalInterestsLinks = document.querySelectorAll('a[href*="personal-interests/index.html"]');
+                personalInterestsLinks.forEach(link => {
+                    link.classList.add('active');
+                });
+                // Set mobile navigation active state for profile section
+                const profileItem = document.querySelector('[data-section="profile"]');
+                if (profileItem) {
+                    profileItem.classList.add('active');
+                    
+                    // Also highlight the Personal Interests link in the submenu
+                    const personalInterestsSubmenuLink = profileItem.querySelector('a[href*="personal-interests/index.html"]');
+                    if (personalInterestsSubmenuLink) {
+                        personalInterestsSubmenuLink.classList.add('active');
+                    }
                 }
+            } else if (currentPath.includes('work-history/index.html')) {
+                const workHistoryLinks = document.querySelectorAll('a[href*="work-history/index.html"]');
+                workHistoryLinks.forEach(link => {
+                    link.classList.add('active');
+                });
+                // Set mobile navigation active state for experience section
+                const experienceItem = document.querySelector('[data-section="experience"]');
+                if (experienceItem) {
+                    experienceItem.classList.add('active');
+                    
+                    // Also highlight the Work History link in the submenu
+                    const workHistorySubmenuLink = experienceItem.querySelector('a[href*="work-history/index.html"]');
+                    if (workHistorySubmenuLink) {
+                        workHistorySubmenuLink.classList.add('active');
+                    }
+                }
+            } else if (currentPath.includes('career-skills/index.html')) {
+                const careerSkillsLinks = document.querySelectorAll('a[href*="career-skills/index.html"]');
+                careerSkillsLinks.forEach(link => {
+                    link.classList.add('active');
+                });
+                // Set mobile navigation active state for experience section
+                const experienceItem = document.querySelector('[data-section="experience"]');
+                if (experienceItem) {
+                    experienceItem.classList.add('active');
+                    
+                    // Also highlight the Career Skills link in the submenu
+                    const careerSkillsSubmenuLink = experienceItem.querySelector('a[href*="career-skills/index.html"]');
+                    if (careerSkillsSubmenuLink) {
+                        careerSkillsSubmenuLink.classList.add('active');
+                    }
+                }
+            } else if (currentPath.includes('cover-letter/index.html')) {
+                const coverLetterLinks = document.querySelectorAll('a[href*="cover-letter/index.html"]');
+                coverLetterLinks.forEach(link => {
+                    link.classList.add('active');
+                });
+                // Set mobile navigation active state for documents section
+                const documentsItem = document.querySelector('[data-section="documents"]');
+                if (documentsItem) {
+                    documentsItem.classList.add('active');
+                    
+                    // Also highlight the Cover Letter link in the submenu
+                    const coverLetterSubmenuLink = documentsItem.querySelector('a[href*="cover-letter/index.html"]');
+                    if (coverLetterSubmenuLink) {
+                        coverLetterSubmenuLink.classList.add('active');
+                    }
+                }
+            } else if (currentPath.includes('references/index.html')) {
+                const referencesLinks = document.querySelectorAll('a[href*="references"]');
+                referencesLinks.forEach(link => {
+                    link.classList.add('active');
+                });
+                // Set mobile navigation active state for documents section
+                const documentsItem = document.querySelector('[data-section="documents"]');
+                if (documentsItem) {
+                    documentsItem.classList.add('active');
+                    
+                    // Also highlight the References link in the submenu
+                    const referencesSubmenuLink = documentsItem.querySelector('a[href*="references"]');
+                    if (referencesSubmenuLink) {
+                        referencesSubmenuLink.classList.add('active');
+                    }
+                }
+            } else if (currentPath === '/' || currentPath === '/index.html') {
+                // Home page - set mobile navigation active state for home section
+                const homeItem = document.querySelector('[data-section="home"]');
+                if (homeItem) homeItem.classList.add('active');
             }
-        } else if (currentPath === '/' || currentPath === '/index.html') {
-            // Home page - set mobile navigation active state for home section
-            const homeItem = document.querySelector('[data-section="home"]');
-            if (homeItem) homeItem.classList.add('active');
-        }
         
         // Set active states for submenu bubble items
         const allSubmenuItems = document.querySelectorAll('.submenu-bubble-item');
@@ -915,7 +1003,10 @@ class NavigationLoader {
                 // Check if this link matches the current page exactly
                 const isCurrentPage = (currentPath.includes('personal-management/index.html') && href.includes('personal-management/index.html')) ||
                                     (currentPath.includes('career-objective/index.html') && href.includes('career-objective/index.html')) ||
-                                    (currentPath.includes('work-history/index.html') && href.includes('work-history/index.html'));
+                                    (currentPath.includes('personal-interests/index.html') && href.includes('personal-interests/index.html')) ||
+                                    (currentPath.includes('work-history/index.html') && href.includes('work-history/index.html')) ||
+                                    (currentPath.includes('career-skills/index.html') && href.includes('career-skills/index.html')) ||
+                                    (currentPath.includes('cover-letter/index.html') && href.includes('cover-letter/index.html'));
                 
                 if (isCurrentPage) {
                     item.classList.add('active');

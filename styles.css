@@ -13,11 +13,10 @@ body {
     background: radial-gradient(ellipse at top center, #333A57 0%, #422C47 100%);
     min-height: 100vh;
     padding-bottom: 80px; /* Add padding for mobile bottom nav */
+    padding-top: 80px; /* Add padding for top navbar */
 }
 
-
-
-
+/* Navigation Component Styles - Handled by components/navbar.css */
 
 /* Hero Section */
 .hero {
@@ -110,21 +109,22 @@ body {
 }
 
 .business-subtitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Dancing Script', cursive;
     font-size: 2.5rem;
-    font-weight: 400;
+    font-weight: 600;
     color: #4D869B;
-    margin-bottom: 0.5rem;
+    margin-top: 0.1rem;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .slogan {
+    font-family: 'Playfair Display', serif;
     font-size: 1.2rem;
     color: #fff;
-    margin-bottom: 3rem;
-    font-weight: 300;
+    margin: 2rem 0;
+    max-width: 600px;
     line-height: 1.8;
-    animation: fadeInUp 1.5s ease-out 0.6s both;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .cta-buttons {
@@ -132,87 +132,47 @@ body {
     gap: 1.5rem;
     justify-content: center;
     flex-wrap: wrap;
-    animation: fadeInUp 1.5s ease-out 0.9s both;
+    margin-top: 2rem;
 }
 
 .cta-btn {
     padding: 1rem 2rem;
     border: none;
     border-radius: 50px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
     font-size: 1rem;
-    font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    position: relative;
-    overflow: hidden;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    min-width: 160px;
 }
 
 .cta-btn.primary {
-    background: linear-gradient(135deg, #4D869B, #3A6B7A);
+    background: linear-gradient(135deg, #4D869B, #77A0B3);
     color: #fff;
-    box-shadow: 0 4px 15px rgba(77, 134, 155, 0.3);
+    box-shadow: 0 4px 15px rgba(77, 134, 155, 0.4);
+}
+
+.cta-btn.primary:hover {
+    background: linear-gradient(135deg, #3A6B7F, #5A8A9D);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(77, 134, 155, 0.6);
 }
 
 .cta-btn.secondary {
     background: transparent;
-    color: #fff;
+    color: #4D869B;
     border: 2px solid #4D869B;
 }
 
-.cta-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-}
-
-.cta-btn.primary:hover {
-    background: linear-gradient(135deg, #3A6B7A, #4D869B);
-    box-shadow: 0 8px 25px rgba(77, 134, 155, 0.4);
-}
-
 .cta-btn.secondary:hover {
-    color: #333;
-    background-color: #4D869B;
-}
-
-/* Content Sections */
-.content-section {
-    padding: 5rem 0;
-    background-color: #fff;
-    position: relative;
-}
-
-.content-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100px;
-    background: linear-gradient(to bottom, transparent, rgba(66, 44, 71, 0.1));
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-.content-section h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    color: #4D869B;
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-.content-section p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: #666;
-    max-width: 800px;
-    margin: 0 auto;
+    background: #4D869B;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(77, 134, 155, 0.4);
 }
 
 /* Animations */
@@ -227,105 +187,56 @@ body {
     }
 }
 
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-@keyframes slideInFromTop {
-    from {
-        opacity: 0;
-        transform: translateY(-50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 /* Responsive Design */
-/* Touch-friendly improvements for mobile */
 @media (max-width: 768px) {
-
+    .hero-content {
+        padding: 0 1rem;
+    }
     
-    /* Hero section responsive adjustments */
     .business-name {
         font-size: 3rem;
     }
-
+    
     .business-subtitle {
         font-size: 2rem;
+    }
+    
+    .slogan {
+        font-size: 1.1rem;
+        margin: 1.5rem 0;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .cta-btn {
+        min-width: 200px;
     }
     
     .profile-image-container {
         width: 150px;
         height: 150px;
-        margin: 1.2rem 0 0 0;
-    }
-    
-    .top-curve {
-        transform: translateY(-15px);
-    }
-    
-    .bottom-curve {
-        transform: translateY(15px);
-    }
-
-    .slogan {
-        font-size: 1rem;
-    }
-
-    .cta-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .cta-btn {
-        width: 100%;
-        max-width: 300px;
-    }
-    
-    .hero {
-        background-attachment: scroll;
     }
 }
 
 @media (max-width: 480px) {
-    .hero-content {
-        padding: 0 1rem;
-    }
-
     .business-name {
         font-size: 2.5rem;
     }
-
+    
     .business-subtitle {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
+    }
+    
+    .slogan {
+        font-size: 1rem;
     }
     
     .profile-image-container {
         width: 120px;
         height: 120px;
-        margin: 1rem 0 0 0;
     }
-    
-    .top-curve {
-        transform: translateY(-10px);
-    }
-    
-    .bottom-curve {
-        transform: translateY(10px);
-    }
-
-    .logo-image {
-        height: 45px;
-    }
-    
-
 }
-
-/* Footer styles are now loaded from components/footer.css */
