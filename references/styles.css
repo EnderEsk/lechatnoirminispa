@@ -1,5 +1,6 @@
 /* Navigation Bar Styles */
 @import url('../components/navbar.css');
+@import url('../components/footer.css');
 /* Main Content Styles */
 body {
     margin: 0;

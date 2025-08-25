@@ -389,8 +389,6 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('load', function() {
         document.body.classList.add('loaded');
     });
-
-
 });
 
 // Add CSS for print styles

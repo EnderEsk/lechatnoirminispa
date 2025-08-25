@@ -1,6 +1,3 @@
-/* Universal Navigation Bar Component Styles */
-
-/* Navigation Bar */
 .navbar {
     position: fixed;
     top: 0;
@@ -10,10 +7,6 @@
     transition: all 0.3s ease;
     z-index: 1000;
     backdrop-filter: blur(10px);
-    /* Ensure navbar is visible */
-    min-height: 70px;
-    display: flex;
-    align-items: center;
 }
 
 .nav-container {
@@ -57,10 +50,8 @@
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 1000;
     padding: 8px 0 20px 0;
-
 }
 
-/* Ensure mobile nav items are positioned relative for submenu positioning */
 .mobile-nav-item {
     position: relative;
 }
@@ -192,11 +183,6 @@
     background-size: contain;
 }
 
-/* Ensure mobile bottom nav is above other content */
-.mobile-bottom-nav {
-    z-index: 1001;
-}
-
 /* Submenu Bubble Animation */
 .submenu-bubble {
     position: fixed;
@@ -220,7 +206,6 @@
     overflow: hidden;
 }
 
-/* Speech bubble tail pointing down to the nav item */
 .submenu-bubble::after {
     content: '';
     position: absolute;
@@ -235,10 +220,6 @@
     transition: left 0.3s ease;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
-
-
-
-
 
 .submenu-bubble.active {
     transform: scale(1);
@@ -301,7 +282,6 @@
     width: 0.5rem;
 }
 
-/* Active state for submenu bubble items */
 .submenu-bubble-item.active {
     color: #A78BFA;
     background-color: rgba(167, 139, 250, 0.2);
@@ -433,11 +413,6 @@
     border-bottom: none;
 }
 
-/* Create unified dropdown container */
-.nav-group {
-    position: relative;
-}
-
 .nav-group::after {
     content: '';
     position: absolute;
@@ -458,7 +433,6 @@
     opacity: 1;
 }
 
-/* Dropdown container */
 .nav-group .nav-links-container {
     position: absolute;
     top: calc(100% + 8px);
@@ -483,21 +457,18 @@
     pointer-events: auto;
 }
 
-/* Keep dropdown open when hovering over the dropdown itself */
 .nav-links-container:hover {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
     pointer-events: auto;
 }
 
-/* Active state styling */
 .nav-group.active .group-title {
     background: rgba(77, 134, 155, 0.3);
     color: #fff;
     border-color: rgba(77, 134, 155, 0.5);
 }
 
-/* Create invisible bridge area to prevent dropdown from disappearing */
 .nav-group::before {
     content: '';
     position: absolute;
@@ -509,7 +480,6 @@
     z-index: 999;
 }
 
-/* Extend hover area to include the bridge */
 .nav-group:hover::before {
     height: 30px;
 }
@@ -520,7 +490,6 @@
     pointer-events: auto;
 }
 
-/* Make sure active links are always clickable */
 .nav-link.active {
     pointer-events: auto;
 }
@@ -612,9 +581,7 @@
     right: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 0.8rem;
-    transition: transform 0.3s ease;
-    color: rgba(255, 255, 255, 0.7);
+    transform: translateY(-50%) rotate(180deg);
 }
 
 .mobile-group-title.active::after {
@@ -680,7 +647,6 @@
     width: 0.5rem;
 }
 
-/* Active state for mobile nav links */
 .mobile-nav-link.active {
     color: #A78BFA;
     background-color: rgba(167, 139, 250, 0.2);
@@ -692,7 +658,6 @@
     background: #A78BFA;
 }
 
-/* Close button for mobile menu */
 .mobile-menu-close {
     position: absolute;
     top: 2rem;
@@ -720,7 +685,6 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    /* Hide entire top navbar on mobile */
     .navbar {
         display: none;
     }
@@ -741,7 +705,6 @@
         padding: 0 1rem;
     }
     
-    /* Mobile submenu improvements */
     .submenu-bubble {
         min-width: 140px;
         max-width: 85vw;
@@ -764,7 +727,6 @@
     }
 }
 
-/* Extra small screen adjustments */
 @media (max-width: 480px) {
     .submenu-bubble {
         min-width: 120px;
