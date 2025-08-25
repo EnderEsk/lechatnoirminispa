@@ -390,59 +390,13 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('loaded');
     });
 
-    // Add print button for references
-    const printButton = document.createElement('button');
-    printButton.textContent = 'Print References';
-    printButton.className = 'print-button';
-    printButton.style.cssText = `
-        position: fixed;
-        top: 120px;
-        right: 20px;
-        background: #4D869B;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: 600;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        z-index: 1000;
-        transition: all 0.3s ease;
-    `;
-    
-    printButton.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-2px)';
-        this.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
-    });
-    
-    printButton.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0)';
-        this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
-    });
-    
-    printButton.addEventListener('click', function() {
-        window.print();
-    });
-    
-    document.body.appendChild(printButton);
 
-    // Hide print button on mobile
-    function handleResize() {
-        if (window.innerWidth <= 768) {
-            printButton.style.display = 'none';
-        } else {
-            printButton.style.display = 'block';
-        }
-    }
-    
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Initial check
 });
 
 // Add CSS for print styles
 const printStyles = `
     @media print {
-        .navbar, .mobile-bottom-nav, .print-button {
+        .navbar, .mobile-bottom-nav {
             display: none !important;
         }
         
