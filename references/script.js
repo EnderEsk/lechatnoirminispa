@@ -160,15 +160,34 @@ function initializeNavigation() {
             const rect = navItem.getBoundingClientRect();
             const bubbleWidth = bubble.offsetWidth;
             const viewportWidth = window.innerWidth;
+            const margin = 20; // Minimum margin from screen edges
+            
+            // Remove any existing edge positioning classes
+            bubble.classList.remove('edge-left', 'edge-right');
             
             // Calculate the center position of the nav item
-            let left = rect.left + (rect.width / 2) - (bubbleWidth / 2);
+            const itemCenter = rect.left + (rect.width / 2);
+            let left = itemCenter - (bubbleWidth / 2);
             
-            // Ensure the bubble doesn't go off-screen
-            if (left < 10) {
-                left = 10;
-            } else if (left + bubbleWidth > viewportWidth - 10) {
-                left = viewportWidth - bubbleWidth - 10;
+            // Check if bubble would go off screen on the left
+            if (left < margin) {
+                // Position at left edge with margin
+                left = margin;
+                bubble.classList.add('edge-left');
+            }
+            // Check if bubble would go off screen on the right
+            else if (left + bubbleWidth > viewportWidth - margin) {
+                // Position at right edge with margin
+                left = viewportWidth - bubbleWidth - margin;
+                bubble.classList.add('edge-right');
+            }
+            
+            // Additional smart positioning: if bubble is too wide for viewport
+            if (bubbleWidth > viewportWidth - (margin * 2)) {
+                // Center the bubble and make it responsive
+                left = margin;
+                bubble.style.maxWidth = `${viewportWidth - (margin * 2)}px`;
+                bubble.classList.add('edge-left');
             }
             
             // Position the bubble above the nav item with proper spacing
@@ -176,24 +195,64 @@ function initializeNavigation() {
             bubble.style.bottom = '80px';
             
             // Update the speech bubble tail position to point to the nav item
-            const tail = bubble.querySelector('.submenu-bubble::after') || bubble;
-            const itemCenter = rect.left + (rect.width / 2);
-            const bubbleLeft = parseFloat(bubble.style.left);
-            const tailOffset = itemCenter - bubbleLeft;
-            
-            // Update the tail position to point to the nav item
+            const tailOffset = itemCenter - left;
             bubble.style.setProperty('--tail-offset', `${tailOffset}px`);
             
-            console.log('Speech bubble positioned:', { 
+            // Ensure tail doesn't go outside the bubble bounds
+            const minTailOffset = 20; // Minimum distance from bubble edge
+            const maxTailOffset = bubbleWidth - 20;
+            const clampedTailOffset = Math.max(minTailOffset, Math.min(maxTailOffset, tailOffset));
+            bubble.style.setProperty('--tail-offset', `${clampedTailOffset}px`);
+            
+            console.log('Smart positioned bubble:', { 
                 left, 
                 bottom: '80px',
                 itemCenter,
-                bubbleLeft,
-                tailOffset,
+                tailOffset: clampedTailOffset,
                 itemLeft: rect.left,
                 itemWidth: rect.width,
-                bubbleWidth
+                bubbleWidth,
+                viewportWidth,
+                edgeLeft: bubble.classList.contains('edge-left'),
+                edgeRight: bubble.classList.contains('edge-right'),
+                maxWidth: bubble.style.maxWidth
             });
+        }
+
+        // Function to validate and adjust bubble positioning if needed
+        function validateBubblePosition(bubble) {
+            const rect = bubble.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            const margin = 20;
+            
+            let needsRepositioning = false;
+            let newLeft = parseFloat(bubble.style.left);
+            let newBottom = parseFloat(bubble.style.bottom);
+            
+            // Check if bubble is off-screen horizontally
+            if (rect.left < margin) {
+                newLeft = margin;
+                needsRepositioning = true;
+            } else if (rect.right > viewportWidth - margin) {
+                newLeft = viewportWidth - rect.width - margin;
+                needsRepositioning = true;
+            }
+            
+            // Check if bubble is off-screen vertically (shouldn't happen with bottom positioning, but safety check)
+            if (rect.bottom > viewportHeight - margin) {
+                newBottom = viewportHeight - rect.height - margin;
+                needsRepositioning = true;
+            }
+            
+            // Apply repositioning if needed
+            if (needsRepositioning) {
+                bubble.style.left = newLeft + 'px';
+                bubble.style.bottom = newBottom + 'px';
+                console.log('Bubble repositioned due to validation:', { newLeft, newBottom });
+            }
+            
+            return needsRepositioning;
         }
 
         // Add click event listeners to mobile nav items
@@ -225,6 +284,12 @@ function initializeNavigation() {
                         bubble.classList.add('active');
                         item.classList.add('active');
                         positionSubmenuBubble(bubble, item);
+                        
+                        // Validate and adjust positioning if needed
+                        setTimeout(() => {
+                            validateBubblePosition(bubble);
+                        }, 50); // Small delay to ensure DOM updates are complete
+                        
                         console.log('Submenu opened and positioned');
                     }
                 } else {
@@ -250,8 +315,23 @@ function initializeNavigation() {
 
         // Close submenus when window resizes
         window.addEventListener('resize', () => {
-            // Close all submenus on resize
-            closeAllSubmenus();
+            // Reposition any open submenus to ensure they're still properly positioned
+            const activeBubbles = document.querySelectorAll('.submenu-bubble.active');
+            activeBubbles.forEach(bubble => {
+                const navItem = bubble.closest('.mobile-nav-item');
+                if (navItem) {
+                    positionSubmenuBubble(bubble, navItem);
+                    // Validate positioning after resize
+                    setTimeout(() => {
+                        validateBubblePosition(bubble);
+                    }, 50);
+                }
+            });
+            
+            // Close all submenus on resize if no active bubbles found
+            if (activeBubbles.length === 0) {
+                closeAllSubmenus();
+            }
         });
 
         // Call initial active state setting
