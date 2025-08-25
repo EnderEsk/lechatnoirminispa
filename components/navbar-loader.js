@@ -26,7 +26,16 @@ class NavigationLoader {
                 basePath
             });
             
-
+            // Check if we're running on localhost
+            const isLocalhost = window.location.hostname === 'localhost' || 
+                               window.location.hostname === '127.0.0.1';
+            
+            if (isLocalhost) {
+                console.log('Using inline navigation for localhost');
+                // For localhost, create a simple inline navigation to avoid routing issues
+                this.createInlineNavigation();
+                return;
+            }
             
             // Load HTML component
             const htmlResponse = await fetch(basePath + 'navbar.html');
@@ -159,6 +168,94 @@ class NavigationLoader {
 
         // Set active states based on current page
         this.setActiveStates();
+    }
+
+    createInlineNavigation() {
+        console.log('Creating inline navigation for localhost');
+        
+        // Create a simple inline navigation
+        const navHTML = `
+            <nav class="navbar">
+                <div class="nav-container">
+                    <div class="logo">
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../index.html' : 'index.html'}" class="logo-link">
+                            <img src="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../logo-test.png' : 'logo-test.png'}" alt="Le Chat Noir Logo" class="logo-image">
+                        </a>
+                    </div>
+                    <div class="nav-links">
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../index.html' : 'index.html'}" class="nav-link">Home</a>
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../career-objective/index.html' : 'career-objective/index.html'}" class="nav-link">Career Objective</a>
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../personal-management/index.html' : 'personal-management/index.html'}" class="nav-link">Personal Management</a>
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../work-history/index.html' : 'work-history/index.html'}" class="nav-link">Work History</a>
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../career-skills/index.html' : 'career-skills/index.html'}" class="nav-link">Career Skills</a>
+                        <a href="${window.location.pathname.includes('/') && !window.location.pathname.endsWith('index.html') ? '../awards-achievements/index.html' : 'awards-achievements/index.html'}" class="nav-link">Awards</a>
+                    </div>
+                </div>
+            </nav>
+        `;
+        
+        // Inject the navigation
+        const placeholder = document.querySelector('#navbar-placeholder');
+        if (placeholder) {
+            placeholder.outerHTML = navHTML;
+        } else {
+            document.body.insertAdjacentHTML('afterbegin', navHTML);
+        }
+        
+        // Load navbar CSS
+        this.loadInlineNavbarCSS();
+        
+        this.loaded = true;
+    }
+    
+    loadInlineNavbarCSS() {
+        if (document.querySelector('#navbar-styles')) return;
+        
+        const styleElement = document.createElement('style');
+        styleElement.id = 'navbar-styles';
+        styleElement.textContent = `
+            .navbar {
+                position: fixed;
+                top: 0;
+                width: 100%;
+                background-color: rgba(51, 58, 87, 0.95);
+                padding: 0.5rem 0;
+                transition: all 0.3s ease;
+                z-index: 1000;
+                backdrop-filter: blur(10px);
+            }
+            .nav-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 2rem;
+            }
+            .logo-link {
+                display: block;
+                text-decoration: none;
+            }
+            .logo-image {
+                height: 50px;
+                width: auto;
+                transition: all 0.3s ease;
+            }
+            .nav-links {
+                display: flex;
+                gap: 2rem;
+            }
+            .nav-link {
+                color: #fff;
+                text-decoration: none;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+            .nav-link:hover {
+                color: #4D869B;
+            }
+        `;
+        document.head.appendChild(styleElement);
     }
 
     setActiveStates() {

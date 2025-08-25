@@ -1,0 +1,21 @@
+EXAMPLE IMAGE PLACEMENT
+
+This is where you would place your actual award images.
+
+For example:
+- excellence-spa-management.jpg
+- customer-service-excellence.jpg
+- leadership-achievement.jpg
+- innovation-award.jpg
+- professional-certification.jpg
+- community-recognition.jpg
+
+The system will automatically load these images based on the filenames specified in your awards-data.json file.
+
+Image Requirements:
+- Format: JPG, PNG, GIF, or WebP
+- Size: 400x300 pixels or larger recommended
+- File size: Under 2MB for optimal loading
+- Naming: Use descriptive names that match your JSON references
+
+Once you add your actual images, delete this text file.

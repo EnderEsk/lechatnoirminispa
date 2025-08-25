@@ -12,7 +12,6 @@ body {
     overflow-x: hidden;
     background: radial-gradient(ellipse at top center, #333A57 0%, #422C47 100%);
     min-height: 100vh;
-    padding-bottom: 80px;
 }
 
 /* Navigation Bar */
@@ -1362,5 +1361,99 @@ body {
     
     .section-title {
         font-size: 1.3rem;
+    }
+}
+
+/* Footer Styles for Work History Page */
+.footer {
+    margin-top: 0 !important;
+    padding: 2rem 0 0 0 !important;
+}
+
+.footer-content {
+    gap: 2rem !important;
+    margin-bottom: 2rem !important;
+}
+
+.footer-section h4 {
+    font-size: 1.1rem !important;
+    margin-bottom: 1rem !important;
+}
+
+.footer-logo h3 {
+    font-size: 1.5rem !important;
+}
+
+.footer-tagline {
+    font-size: 1rem !important;
+}
+
+.footer-description {
+    font-size: 0.9rem !important;
+    line-height: 1.6 !important;
+}
+
+.footer-links li {
+    margin-bottom: 0.6rem !important;
+}
+
+.footer-links a {
+    font-size: 0.9rem !important;
+}
+
+.contact-item {
+    font-size: 0.9rem !important;
+    gap: 0.6rem !important;
+}
+
+.social-link {
+    width: 40px !important;
+    height: 40px !important;
+}
+
+.footer-bottom {
+    padding: 1.5rem 0 !important;
+}
+
+.footer-bottom-content {
+    padding: 0 1.5rem !important;
+}
+
+.copyright {
+    font-size: 0.8rem !important;
+}
+
+.footer-bottom-links a {
+    font-size: 0.8rem !important;
+}
+
+/* Responsive footer adjustments */
+@media (max-width: 768px) {
+    .footer {
+        padding: 1.5rem 0 0 0 !important;
+    }
+    
+    .footer-content {
+        gap: 1.5rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+    
+    .footer-bottom {
+        padding: 1rem 0 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: 1rem 0 0 0 !important;
+    }
+    
+    .footer-content {
+        gap: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .footer-bottom {
+        padding: 0.8rem 0 !important;
     }
 }

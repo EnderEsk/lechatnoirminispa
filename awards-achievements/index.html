@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awards & Achievements - Le Chat Noir Mini Spa</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar Component will be loaded here -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="awards-main">
+        <!-- Hero Section -->
+        <section class="awards-hero">
+            <div class="awards-hero-overlay"></div>
+            <div class="awards-hero-content">
+                <h1 class="awards-title">Awards & Achievements</h1>
+                <p class="awards-subtitle">Celebrating Excellence & Recognition</p>
+            </div>
+            <div class="floating-elements">
+                <div class="floating-element element-1"></div>
+                <div class="floating-element element-2"></div>
+                <div class="floating-element element-3"></div>
+                <div class="floating-element element-4"></div>
+            </div>
+        </section>
+
+        <!-- Awards Gallery Section -->
+        <section class="awards-gallery-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Recognition Gallery</h2>
+                    <div class="decorative-line"></div>
+                    <p class="section-description">A collection of honors, certifications, and achievements that reflect dedication to excellence in spa management and beauty care.</p>
+                </div>
+                
+                <!-- Awards will be dynamically loaded from JSON -->
+                <div class="awards-grid" id="awardsGrid">
+                    <!-- Award cards will be generated here by JavaScript -->
+                </div>
+
+                <!-- Category Filter -->
+                <div class="category-filter-section">
+                    <h3>Filter by Category</h3>
+                    <div class="category-buttons" id="categoryButtons">
+                        <!-- Category buttons will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievement Summary Section -->
+        <section class="achievement-summary-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Achievement Highlights</h2>
+                    <div class="decorative-line"></div>
+                </div>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-icon">📊</div>
+                        <h3>Total Awards</h3>
+                        <p class="summary-number" id="totalAwards">0</p>
+                        <p class="summary-description">Recognitions earned</p>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">🎯</div>
+                        <h3>Categories</h3>
+                        <p class="summary-number" id="totalCategories">0</p>
+                        <p class="summary-description">Different achievement types</p>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">📅</div>
+                        <h3>Latest</h3>
+                        <p class="summary-date" id="latestAward">Loading...</p>
+                        <p class="summary-description">Most recent recognition</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Management Info -->
+        <section class="data-info-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Content Management</h2>
+                    <div class="decorative-line"></div>
+                </div>
+                <div class="info-content">
+                    <div class="info-card">
+                        <div class="info-icon">📁</div>
+                        <h3>JSON Data File</h3>
+                        <p>All award information is managed through the <code>awards-data.json</code> file. Edit this file to add, modify, or remove awards.</p>
+                        <div class="file-path">File: <code>awards-achievements/awards-data.json</code></div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🖼️</div>
+                        <h3>Images Folder</h3>
+                        <p>Store award images in the <code>images/</code> folder. Reference them by filename in the JSON data.</p>
+                        <div class="file-path">Folder: <code>awards-achievements/images/</code></div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">⚙️</div>
+                        <h3>Easy Updates</h3>
+                        <p>Simply edit the JSON file and add images to the folder. The website automatically updates to display your changes.</p>
+                        <div class="file-path">No coding required!</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Component will be loaded here -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="../components/navbar-loader.js"></script>
+    <script src="../components/footer-loader.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

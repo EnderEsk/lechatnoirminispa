@@ -17,7 +17,11 @@
       "destination": "/work-history/index.html"
     },
     {
-      "source": "/(.*)",
+      "source": "/awards-achievements",
+      "destination": "/awards-achievements/index.html"
+    },
+    {
+      "source": "/",
       "destination": "/index.html"
     }
   ],

@@ -1,0 +1,72 @@
+{
+  "awards": [
+    {
+      "id": 1,
+      "title": "Excellence in Spa Management",
+      "description": "Awarded for outstanding leadership and operational excellence in spa management. Recognized for implementing innovative customer service protocols and achieving 95% client satisfaction ratings. This award represents the culmination of years of dedication to creating exceptional spa experiences and building high-performing teams.",
+      "date": "December 2023",
+      "organization": "International Spa Association",
+      "image": "excellence-spa-management.jpg",
+      "category": "Leadership",
+      "badge": "🏆"
+    },
+    {
+      "id": 2,
+      "title": "Customer Service Excellence",
+      "description": "Honored for exceptional customer service and client relationship management. Achieved through personalized service delivery, proactive problem-solving, and maintaining the highest standards of professionalism. This recognition highlights the importance of putting clients first and creating memorable experiences.",
+      "date": "October 2023",
+      "organization": "Beauty Industry Awards",
+      "image": "customer-service-excellence.jpg",
+      "category": "Service",
+      "badge": "⭐"
+    },
+    {c
+      "id": 3,
+      "title": "Leadership Achievement",
+      "description": "Recognized for outstanding leadership in team development and business growth. Successfully led a team of 15 professionals, increased revenue by 40%, and implemented strategic initiatives that positioned the spa as a market leader. This achievement demonstrates strong business acumen and people management skills.",
+      "date": "August 2023",
+      "organization": "Business Leadership Council",
+      "image": "leadership-achievement.jpg",
+      "category": "Leadership",
+      "badge": "🎖️"
+    },
+    {
+      "id": 4,
+      "title": "Innovation Award",
+      "description": "Awarded for introducing cutting-edge spa technologies and treatment protocols. Pioneered the integration of AI-powered booking systems and sustainable spa practices, resulting in improved efficiency and environmental responsibility. This recognition celebrates forward-thinking approaches in the beauty industry.",
+      "date": "June 2023",
+      "organization": "Spa Innovation Institute",
+      "image": "innovation-award.jpg",
+      "category": "Innovation",
+      "badge": "🏅"
+    },
+    {
+      "id": 5,
+      "title": "Professional Certification",
+      "description": "Achieved advanced certification in spa management and wellness therapy. Completed rigorous training programs covering business operations, therapeutic techniques, and industry best practices. This certification validates expertise and commitment to professional development in the spa and beauty sector.",
+      "date": "April 2023",
+      "organization": "International Wellness Academy",
+      "image": "professional-certification.jpg",
+      "category": "Education",
+      "badge": "💎"
+    },
+    {
+      "id": 6,
+      "title": "Community Recognition",
+      "description": "Honored for outstanding contributions to the local community through spa services and wellness education. Provided free wellness workshops, supported local charities, and promoted health awareness. This recognition reflects the commitment to giving back and making a positive impact beyond business success.",
+      "date": "February 2023",
+      "organization": "Community Service Foundation",
+      "image": "community-recognition.jpg",
+      "category": "Community",
+      "badge": "🌟"
+    }
+  ],
+  "categories": [
+    "Leadership",
+    "Service", 
+    "Innovation",
+    "Education",
+    "Community"
+  ],
+  "lastUpdated": "2024-01-15"
+}

@@ -7,26 +7,8 @@ function loadFooter() {
     try {
         console.log('Loading footer component');
         
-        // Create footer HTML directly (no fetch needed)
-        const footerHtml = createFooterHTML();
-        
-        // Find or create footer placeholder
-        let footerPlaceholder = document.getElementById('footer-placeholder');
-        if (!footerPlaceholder) {
-            // If no placeholder exists, append footer to body
-            document.body.insertAdjacentHTML('beforeend', footerHtml);
-        } else {
-            // Replace placeholder with footer
-            footerPlaceholder.innerHTML = footerHtml;
-        }
-        
-        // Load footer CSS
-        loadFooterCSS();
-        
-        // Load footer JavaScript
-        loadFooterJS();
-        
-        console.log('Footer component loaded successfully');
+        // Load footer HTML from file
+        loadFooterHTML();
         
     } catch (error) {
         console.error('Error loading footer:', error);
@@ -35,12 +17,113 @@ function loadFooter() {
     }
 }
 
-function createFooterHTML() {
+function loadFooterHTML() {
+    // Determine if we're in a subdirectory for path adjustments
+    const isInSubdirectory = isInSubdirectoryPage();
+    const componentsPath = isInSubdirectory ? '../components/' : 'components/';
+    
+    console.log('Loading footer from path:', componentsPath);
+    console.log('Current location:', window.location.href);
+    console.log('Protocol:', window.location.protocol);
+    console.log('Footer placeholder element:', document.getElementById('footer-placeholder'));
+    
+    // Check if we're running on localhost or file protocol
+    const isLocalhost = window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1';
+    
+    console.log('Is localhost:', isLocalhost);
+    
+    // For localhost, use inline footer to avoid routing issues
+    if (isLocalhost) {
+        console.log('Using inline footer for localhost');
+        createInlineFooter();
+        return;
+    }
+    
+    // Create a timeout promise for localhost scenarios
+    const timeoutPromise = new Promise((_, reject) => {
+        if (isLocalhost) {
+            setTimeout(() => reject(new Error('Fetch timeout on localhost')), 2000); // 2 second timeout
+        }
+    });
+    
+    // Try to fetch the footer HTML file
+    const fetchPromise = fetch(`${componentsPath}footer.html`)
+        .then(response => {
+            console.log('Footer fetch response:', response.status, response.statusText);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text();
+        });
+    
+    // Race between fetch and timeout
+    Promise.race([fetchPromise, timeoutPromise])
+        .then(html => {
+            console.log('Footer HTML loaded, length:', html.length);
+            console.log('Footer HTML preview:', html.substring(0, 200));
+            console.log('Footer HTML contains footer tag:', html.includes('<footer'));
+            console.log('Footer HTML contains hero section:', html.includes('hero'));
+            console.log('Footer HTML contains main content:', html.includes('main'));
+            
+            // Process the HTML to fix paths for subdirectories
+            const processedHtml = processFooterHTML(html, isInSubdirectory);
+            
+            // Find or create footer placeholder
+            let footerPlaceholder = document.getElementById('footer-placeholder');
+            if (!footerPlaceholder) {
+                console.log('No footer placeholder found, creating footer at end of body');
+                // If no placeholder exists, append footer to body
+                document.body.insertAdjacentHTML('beforeend', processedHtml);
+            } else {
+                console.log('Footer placeholder found, replacing content');
+                console.log('Footer placeholder before replacement:', footerPlaceholder.innerHTML);
+                // Replace placeholder with footer
+                footerPlaceholder.innerHTML = processedHtml;
+                console.log('Footer placeholder after replacement:', footerPlaceholder.innerHTML);
+            }
+            
+            // Load footer CSS
+            loadFooterCSS();
+            
+            // Load footer JavaScript
+            loadFooterJS();
+            
+            console.log('Footer component loaded successfully');
+        })
+        .catch(error => {
+            console.error('Error fetching footer HTML:', error);
+            console.log('Falling back to inline footer creation');
+            // Fallback to inline footer creation
+            createInlineFooter();
+        });
+}
+
+function processFooterHTML(html, isInSubdirectory) {
+    let processedHtml = html;
+    
+    if (isInSubdirectory) {
+        // Fix logo path
+        processedHtml = processedHtml.replace('src="logo-test.png"', 'src="../logo-test.png"');
+        
+        // Fix navigation links
+        processedHtml = processedHtml.replace('href="index.html"', 'href="../index.html"');
+        processedHtml = processedHtml.replace('href="career-objective/index.html"', 'href="../career-objective/index.html"');
+        processedHtml = processedHtml.replace('href="personal-management/index.html"', 'href="../personal-management/index.html"');
+        processedHtml = processedHtml.replace('href="work-history/index.html"', 'href="../work-history/index.html"');
+        processedHtml = processedHtml.replace('href="career-skills/index.html"', 'href="../career-skills/index.html"');
+        processedHtml = processedHtml.replace('href="awards-achievements/index.html"', 'href="../awards-achievements/index.html"');
+    }
+    
+    return processedHtml;
+}
+
+function createInlineFooter() {
     // Determine if we're in a subdirectory for path adjustments
     const isInSubdirectory = isInSubdirectoryPage();
     const pathPrefix = isInSubdirectory ? '../' : '';
     
-    return `
+    const footerHtml = `
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-content">
@@ -64,6 +147,7 @@ function createFooterHTML() {
                         <li><a href="${pathPrefix}personal-management/index.html">Personal Management</a></li>
                         <li><a href="${pathPrefix}work-history/index.html">Work History</a></li>
                         <li><a href="${pathPrefix}career-skills/index.html">Career Skills</a></li>
+                        <li><a href="${pathPrefix}awards-achievements/index.html">Awards & Achievements</a></li>
                     </ul>
                 </div>
                 
@@ -132,6 +216,24 @@ function createFooterHTML() {
             </div>
         </footer>
     `;
+    
+    // Find or create footer placeholder
+    let footerPlaceholder = document.getElementById('footer-placeholder');
+    if (!footerPlaceholder) {
+        // If no placeholder exists, append footer to body
+        document.body.insertAdjacentHTML('beforeend', footerHtml);
+    } else {
+        // Replace placeholder with footer
+        footerPlaceholder.innerHTML = footerHtml;
+    }
+    
+    // Load footer CSS
+    loadFooterCSS();
+    
+    // Load footer JavaScript
+    loadFooterJS();
+    
+    console.log('Inline footer created successfully');
 }
 
 function isInSubdirectoryPage() {
@@ -168,9 +270,27 @@ function loadFooterCSS() {
     link.href = `${componentsPath}footer.css`;
     link.type = 'text/css';
     
+    // Add error handling for CSS loading
+    link.onerror = () => {
+        console.error('Failed to load footer CSS:', link.href);
+        // Try alternative path for localhost
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            console.log('Trying alternative CSS path for localhost');
+            const altLink = document.createElement('link');
+            altLink.rel = 'stylesheet';
+            altLink.href = `./components/footer.css`;
+            altLink.type = 'text/css';
+            document.head.appendChild(altLink);
+        }
+    };
+    
+    link.onload = () => {
+        console.log('Footer CSS loaded successfully:', link.href);
+    };
+    
     // Add to head
     document.head.appendChild(link);
-    console.log('Footer CSS loaded:', link.href);
+    console.log('Footer CSS loading from:', link.href);
 }
 
 function loadFooterJS() {
@@ -188,9 +308,26 @@ function loadFooterJS() {
     script.src = `${componentsPath}footer.js`;
     script.type = 'text/javascript';
     
+    // Add error handling for JS loading
+    script.onerror = () => {
+        console.error('Failed to load footer JS:', script.src);
+        // Try alternative path for localhost
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            console.log('Trying alternative JS path for localhost');
+            const altScript = document.createElement('script');
+            altScript.src = `./components/footer.js`;
+            altScript.type = 'text/javascript';
+            document.body.appendChild(altScript);
+        }
+    };
+    
+    script.onload = () => {
+        console.log('Footer JS loaded successfully:', script.src);
+    };
+    
     // Add to body
     document.body.appendChild(script);
-    console.log('Footer JS loaded:', script.src);
+    console.log('Footer JS loading from:', script.src);
 }
 
 function createFallbackFooter() {

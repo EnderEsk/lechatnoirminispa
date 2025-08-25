@@ -46,7 +46,9 @@ function initializeNavigation() {
             // Allow external links to work normally
             if (href.startsWith('http') || href.startsWith('career-objective/') || href.startsWith('./career-objective/') || 
                 href.startsWith('personal-management/') || href.startsWith('./personal-management/') ||
-                href.startsWith('work-history/') || href.startsWith('./work-history/')) {
+                href.startsWith('work-history/') || href.startsWith('./work-history/') ||
+                href.startsWith('career-skills/') || href.startsWith('./career-skills/') ||
+                href.startsWith('awards-achievements/') || href.startsWith('./awards-achievements/')) {
                 return; // Don't prevent default, let the link work normally
             }
             
