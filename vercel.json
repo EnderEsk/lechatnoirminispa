@@ -31,6 +31,26 @@
       "source": "/awards-achievements/index.html",
       "destination": "/awards-achievements",
       "permanent": true
+    },
+    {
+      "source": "/portfolio/index.html",
+      "destination": "/portfolio",
+      "permanent": true
+    },
+    {
+      "source": "/references/index.html",
+      "destination": "/references",
+      "permanent": true
+    },
+    {
+      "source": "/cover-letter/index.html",
+      "destination": "/cover-letter",
+      "permanent": true
+    },
+    {
+      "source": "/personal-interests/index.html",
+      "destination": "/personal-interests",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -53,6 +73,22 @@
     {
       "source": "/awards-achievements",
       "destination": "/awards-achievements/index.html"
+    },
+    {
+      "source": "/portfolio",
+      "destination": "/portfolio/index.html"
+    },
+    {
+      "source": "/references",
+      "destination": "/references/index.html"
+    },
+    {
+      "source": "/cover-letter",
+      "destination": "/cover-letter/index.html"
+    },
+    {
+      "source": "/personal-interests",
+      "destination": "/personal-interests/index.html"
     }
   ]
 }

@@ -1,5 +1,134 @@
 // Portfolio Page JavaScript
 
+// Photoshoot Gallery functionality
+function initializePhotoshootGallery() {
+    const photos = document.querySelectorAll('.photoshoot-image');
+    const indicators = document.querySelectorAll('.indicator');
+    const prevBtn = document.getElementById('prevPhoto');
+    const nextBtn = document.getElementById('nextPhoto');
+    const currentPhotoSpan = document.getElementById('currentPhoto');
+    
+    let currentPhotoIndex = 0;
+    let autoPlayInterval;
+    const autoPlayDelay = 4000; // 4 seconds between transitions
+    
+    // Initialize the gallery
+    function showPhoto(index) {
+        // Remove active class from all photos and indicators
+        photos.forEach(photo => photo.classList.remove('active'));
+        indicators.forEach(indicator => indicator.classList.remove('active'));
+        
+        // Add active class to current photo and indicator
+        photos[index].classList.add('active');
+        indicators[index].classList.add('active');
+        
+        // Update counter
+        currentPhotoSpan.textContent = index + 1;
+        
+        // Update button states
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === photos.length - 1;
+    }
+    
+    // Next photo function
+    function nextPhoto() {
+        currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+        showPhoto(currentPhotoIndex);
+        resetAutoPlay();
+    }
+    
+    // Previous photo function
+    function prevPhoto() {
+        currentPhotoIndex = currentPhotoIndex === 0 ? photos.length - 1 : currentPhotoIndex - 1;
+        showPhoto(currentPhotoIndex);
+        resetAutoPlay();
+    }
+    
+    // Auto-play functionality
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(nextPhoto, autoPlayDelay);
+    }
+    
+    function stopAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+        }
+    }
+    
+    function resetAutoPlay() {
+        stopAutoPlay();
+        startAutoPlay();
+    }
+    
+    // Event listeners
+    if (nextBtn) {
+        nextBtn.addEventListener('click', nextPhoto);
+    }
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', prevPhoto);
+    }
+    
+    // Indicator click events
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            currentPhotoIndex = index;
+            showPhoto(currentPhotoIndex);
+            resetAutoPlay();
+        });
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            prevPhoto();
+        } else if (e.key === 'ArrowRight') {
+            nextPhoto();
+        }
+    });
+    
+    // Pause auto-play on hover
+    const photoshootContainer = document.querySelector('.photoshoot-container');
+    if (photoshootContainer) {
+        photoshootContainer.addEventListener('mouseenter', stopAutoPlay);
+        photoshootContainer.addEventListener('mouseleave', startAutoPlay);
+    }
+    
+    // Touch/swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    photoshootContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    photoshootContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                // Swipe left - next photo
+                nextPhoto();
+            } else {
+                // Swipe right - previous photo
+                prevPhoto();
+            }
+        }
+    }
+    
+    // Initialize the gallery
+    showPhoto(0);
+    startAutoPlay();
+    
+    console.log('Photoshoot gallery initialized with', photos.length, 'photos');
+}
+
 // Navigation functionality
 function initializeNavigation() {
     console.log('Initializing navigation...');
@@ -274,6 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeNavigation();
     initializePortfolio();
     initializeModal();
+    initializePhotoshootGallery(); // Initialize photoshoot gallery
 });
 
 // Initialize if DOM is already loaded
@@ -282,9 +412,11 @@ if (document.readyState === 'loading') {
         initializeNavigation();
         initializePortfolio();
         initializeModal();
+        initializePhotoshootGallery(); // Initialize photoshoot gallery
     });
 } else {
     initializeNavigation();
     initializePortfolio();
     initializeModal();
+    initializePhotoshootGallery(); // Initialize photoshoot gallery
 }

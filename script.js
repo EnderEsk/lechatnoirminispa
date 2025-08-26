@@ -58,14 +58,14 @@ function positionBubble(button, bubble, arrow) {
     
     // Determine vertical position (prefer below, fallback to above)
     let top, arrowTop, arrowBorder;
-    if (spaceBelow >= bubbleRect.height + 20) {
-        // Position below button
-        top = buttonRect.bottom + 10;
+    if (spaceBelow >= bubbleRect.height + 2) {
+        // Position below button with minimal gap (2px)
+        top = buttonRect.bottom + 2;
         arrowTop = -8;
         arrowBorder = 'border-bottom: 8px solid rgba(51, 58, 87, 0.95);';
-    } else if (spaceAbove >= bubbleRect.height + 20) {
-        // Position above button
-        top = buttonRect.top - bubbleRect.height - 10;
+    } else if (spaceAbove >= bubbleRect.height + 2) {
+        // Position above button with minimal gap (2px)
+        top = buttonRect.top - bubbleRect.height - 2;
         arrowTop = bubbleRect.height;
         arrowBorder = 'border-top: 8px solid rgba(51, 58, 87, 0.95);';
     } else {
@@ -84,12 +84,12 @@ function positionBubble(button, bubble, arrow) {
         left = preferredLeft;
         arrowLeft = (bubbleRect.width / 2) - 8;
     } else if (spaceRight >= bubbleRect.width) {
-        // Position to the right
-        left = buttonRect.right + 10;
+        // Position to the right with minimal gap (2px)
+        left = buttonRect.right + 2;
         arrowLeft = -8;
     } else if (spaceLeft >= bubbleRect.width) {
-        // Position to the left
-        left = buttonRect.left - bubbleRect.width - 10;
+        // Position to the left with minimal gap (2px)
+        left = buttonRect.left - bubbleRect.width - 2;
         arrowLeft = bubbleRect.width - 8;
     } else {
         // Center horizontally if no space on sides

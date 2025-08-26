@@ -1,0 +1,30 @@
+{
+  "name": "le-chat-noir-portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio page with photoshoot gallery for Le Chat Noir Mini Spa",
+  "main": "index.html",
+  "scripts": {
+    "convert-images": "node convert-heic-images.js",
+    "start": "python3 -m http.server 8000 || python -m http.server 8000 || npx serve .",
+    "dev": "python3 -m http.server 8000 || python -m http.server 8000 || npx serve ."
+  },
+  "keywords": [
+    "portfolio",
+    "photoshoot",
+    "gallery",
+    "spa",
+    "beauty"
+  ],
+  "author": "Le Chat Noir Mini Spa",
+  "license": "MIT",
+  "devDependencies": {
+    "sharp": "^0.32.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "."
+  }
+}
